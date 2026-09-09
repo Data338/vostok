@@ -4,6 +4,16 @@
 
 Based on [Scoria](https://github.com/Zyplos/scoria) by Zyplos (OLED black + red VSCode theme), pushed to full neon saturation with a Tron-blue punctuation family.
 
+## Screenshots
+
+Neovim (TypeScript):
+
+![Vostok in Neovim](./screenshots/nvim.png)
+
+OpenCode TUI (shell commands with tree-sitter highlight):
+
+![Vostok in OpenCode](./screenshots/opencode.png)
+
 ## Palette
 
 | Role | Hex | Notes |
