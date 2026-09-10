@@ -1,0 +1,1974 @@
+diff --git a/packages/tui/src/component/dialog-provider.tsx b/packages/tui/src/component/dialog-provider.tsx
+index 6b86a32..4683e0b 100644
+--- a/packages/tui/src/component/dialog-provider.tsx
++++ b/packages/tui/src/component/dialog-provider.tsx
+@@ -7,6 +7,7 @@ import { useSDK } from "../context/sdk"
+ import { DialogPrompt } from "../ui/dialog-prompt"
+ import { Link } from "../ui/link"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "../ui/use-agent-color"
+ import { TextAttributes } from "@opentui/core"
+ import type { ProviderAuthAuthorization, ProviderAuthMethod } from "@opencode-ai/sdk/v2"
+ import { DialogModel } from "./dialog-model"
+@@ -238,6 +239,7 @@ interface AutoMethodProps {
+ }
+ function AutoMethod(props: AutoMethodProps) {
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const sdk = useSDK()
+   const dialog = useDialog()
+   const sync = useSync()
+@@ -294,7 +296,7 @@ function AutoMethod(props: AutoMethodProps) {
+         </text>
+       </box>
+       <box gap={1}>
+-        <Link href={props.authorization.url} fg={theme.primary} />
++        <Link href={props.authorization.url} fg={agentColor()} />
+         <text fg={theme.textMuted}>{props.authorization.instructions}</text>
+       </box>
+       <text fg={theme.textMuted}>Waiting for authorization…</text>
+@@ -313,6 +315,7 @@ interface CodeMethodProps {
+ }
+ function CodeMethod(props: CodeMethodProps) {
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const sdk = useSDK()
+   const sync = useSync()
+   const dialog = useDialog()
+@@ -339,7 +342,7 @@ function CodeMethod(props: CodeMethodProps) {
+       description={() => (
+         <box gap={1}>
+           <text fg={theme.textMuted}>{props.authorization.instructions}</text>
+-          <Link href={props.authorization.url} fg={theme.primary} />
++          <Link href={props.authorization.url} fg={agentColor()} />
+           <Show when={error()}>
+             <text fg={theme.error}>Invalid code</text>
+           </Show>
+diff --git a/packages/tui/src/component/dialog-retry-action.tsx b/packages/tui/src/component/dialog-retry-action.tsx
+index b52a6e9..eb68deb 100644
+--- a/packages/tui/src/component/dialog-retry-action.tsx
++++ b/packages/tui/src/component/dialog-retry-action.tsx
+@@ -2,6 +2,7 @@ import { RGBA, TextAttributes } from "@opentui/core"
+ import open from "open"
+ import { createSignal } from "solid-js"
+ import { selectedForeground, useTheme } from "../context/theme"
++import { useAgentColor } from "../ui/use-agent-color"
+ import { useDialog, type DialogContext } from "../ui/dialog"
+ import { Link } from "../ui/link"
+ import { BgPulse } from "./bg-pulse"
+@@ -39,6 +40,7 @@ function panelOverlay(color: RGBA) {
+ export function DialogRetryAction(props: DialogRetryActionProps) {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const fg = selectedForeground(theme)
+   const showGoTreatment = () => props.link === GO_URL
+   const textBg = () => (showGoTreatment() ? panelOverlay(theme.backgroundPanel) : undefined)
+@@ -100,11 +102,11 @@ export function DialogRetryAction(props: DialogRetryActionProps) {
+         {props.link ? (
+           showGoTreatment() ? (
+             <box alignItems="center" justifyContent="flex-end" height={7} paddingBottom={1}>
+-              <Link href={props.link} fg={theme.primary} bg={textBg()} wrapMode="none" />
++              <Link href={props.link} fg={agentColor()} bg={textBg()} wrapMode="none" />
+             </box>
+           ) : (
+             <box width="100%" flexDirection="row" justifyContent="center" paddingBottom={1}>
+-              <Link href={props.link} fg={theme.primary} wrapMode="none" />
++              <Link href={props.link} fg={agentColor()} wrapMode="none" />
+             </box>
+           )
+         ) : (
+@@ -114,7 +116,7 @@ export function DialogRetryAction(props: DialogRetryActionProps) {
+           <box
+             paddingLeft={2}
+             paddingRight={2}
+-            backgroundColor={selected() === "dismiss" ? theme.primary : RGBA.fromInts(0, 0, 0, 0)}
++            backgroundColor={selected() === "dismiss" ? agentColor() : RGBA.fromInts(0, 0, 0, 0)}
+             onMouseOver={() => setSelected("dismiss")}
+             onMouseUp={() => dismiss(props, dialog)}
+           >
+@@ -129,7 +131,7 @@ export function DialogRetryAction(props: DialogRetryActionProps) {
+           <box
+             paddingLeft={2}
+             paddingRight={2}
+-            backgroundColor={selected() === "action" ? theme.primary : RGBA.fromInts(0, 0, 0, 0)}
++            backgroundColor={selected() === "action" ? agentColor() : RGBA.fromInts(0, 0, 0, 0)}
+             onMouseOver={() => setSelected("action")}
+             onMouseUp={() => runAction(props, dialog)}
+           >
+diff --git a/packages/tui/src/component/dialog-session-delete-failed.tsx b/packages/tui/src/component/dialog-session-delete-failed.tsx
+index f3617a5..0d9dee9 100644
+--- a/packages/tui/src/component/dialog-session-delete-failed.tsx
++++ b/packages/tui/src/component/dialog-session-delete-failed.tsx
+@@ -1,5 +1,6 @@
+ import { TextAttributes } from "@opentui/core"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "../ui/use-agent-color"
+ import { useDialog } from "../ui/dialog"
+ import { createStore } from "solid-js/store"
+ import { For } from "solid-js"
+@@ -14,6 +15,7 @@ export function DialogSessionDeleteFailed(props: {
+ }) {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const [store, setStore] = createStore({
+     active: "delete" as "delete" | "restore",
+   })
+@@ -75,7 +77,7 @@ export function DialogSessionDeleteFailed(props: {
+               paddingRight={1}
+               paddingTop={1}
+               paddingBottom={1}
+-              backgroundColor={item.id === store.active ? theme.primary : undefined}
++              backgroundColor={item.id === store.active ? agentColor() : undefined}
+               onMouseUp={() => {
+                 setStore("active", item.id)
+                 void confirm()
+diff --git a/packages/tui/src/component/dialog-workspace-file-changes.tsx b/packages/tui/src/component/dialog-workspace-file-changes.tsx
+index 2babeec..82ef95c 100644
+--- a/packages/tui/src/component/dialog-workspace-file-changes.tsx
++++ b/packages/tui/src/component/dialog-workspace-file-changes.tsx
+@@ -5,6 +5,7 @@ import { createMemo, For } from "solid-js"
+ import { createStore } from "solid-js/store"
+ import { Locale } from "../util/locale"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "../ui/use-agent-color"
+ import { useTuiConfig } from "../config"
+ import { useDialog, type DialogContext } from "../ui/dialog"
+ import { getScrollAcceleration } from "../util/scroll"
+@@ -32,6 +33,7 @@ export function DialogWorkspaceFileChanges(props: {
+ }) {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const tuiConfig = useTuiConfig()
+   const scrollAcceleration = createMemo(() => getScrollAcceleration(tuiConfig))
+   const [store, setStore] = createStore({ active: "yes" as WorkspaceFileChangesChoice })
+@@ -114,7 +116,7 @@ export function DialogWorkspaceFileChanges(props: {
+             <box
+               paddingLeft={2}
+               paddingRight={2}
+-              backgroundColor={item === store.active ? theme.primary : undefined}
++              backgroundColor={item === store.active ? agentColor() : undefined}
+               onMouseUp={() => {
+                 setStore("active", item)
+                 props.onSelect(item)
+diff --git a/packages/tui/src/component/dialog-workspace-unavailable.tsx b/packages/tui/src/component/dialog-workspace-unavailable.tsx
+index 3181bd8..dc7a384 100644
+--- a/packages/tui/src/component/dialog-workspace-unavailable.tsx
++++ b/packages/tui/src/component/dialog-workspace-unavailable.tsx
+@@ -2,12 +2,14 @@ import { TextAttributes } from "@opentui/core"
+ import { createStore } from "solid-js/store"
+ import { For } from "solid-js"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "../ui/use-agent-color"
+ import { useDialog } from "../ui/dialog"
+ import { useBindings } from "../keymap"
+ 
+ export function DialogWorkspaceUnavailable(props: { onRestore?: () => boolean | void | Promise<boolean | void> }) {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const [store, setStore] = createStore({
+     active: "restore" as "cancel" | "restore",
+   })
+@@ -53,7 +55,7 @@ export function DialogWorkspaceUnavailable(props: { onRestore?: () => boolean |
+             <box
+               paddingLeft={2}
+               paddingRight={2}
+-              backgroundColor={item === store.active ? theme.primary : undefined}
++              backgroundColor={item === store.active ? agentColor() : undefined}
+               onMouseUp={() => {
+                 setStore("active", item)
+                 void confirm()
+diff --git a/packages/tui/src/component/prompt/autocomplete.tsx b/packages/tui/src/component/prompt/autocomplete.tsx
+index 099fa9d..377909a 100644
+--- a/packages/tui/src/component/prompt/autocomplete.tsx
++++ b/packages/tui/src/component/prompt/autocomplete.tsx
+@@ -10,6 +10,7 @@ import { useProject } from "../../context/project"
+ import { useSDK } from "../../context/sdk"
+ import { useSync } from "../../context/sync"
+ import { useData } from "../../context/data"
++import { useLocal } from "../../context/local"
+ import { getScrollAcceleration } from "../../util/scroll"
+ import { useTuiPaths } from "../../context/runtime"
+ import { useTuiConfig } from "../../config"
+@@ -92,6 +93,12 @@ export function Autocomplete(props: {
+   const slashes = useCommandSlashes()
+   const modeStack = useOpencodeModeStack()
+   const { theme } = useTheme()
++  const local = useLocal()
++  // Seleção do autocomplete na cor do modo (vermelho build / Tron plan).
++  const agentColor = createMemo(() => {
++    const agent = local.agent.current()
++    return agent ? local.agent.color(agent.name) : theme.primary
++  })
+   const dimensions = useTerminalDimensions()
+   const frecency = useFrecency()
+   const tuiConfig = useTuiConfig()
+@@ -749,7 +756,7 @@ export function Autocomplete(props: {
+             <box
+               paddingLeft={1}
+               paddingRight={1}
+-              backgroundColor={index === store.selected ? theme.primary : undefined}
++              backgroundColor={index === store.selected ? agentColor() : undefined}
+               flexDirection="row"
+               onMouseMove={() => {
+                 setStore("input", "mouse")
+@@ -764,11 +771,11 @@ export function Autocomplete(props: {
+               }}
+               onMouseUp={() => select()}
+             >
+-              <text fg={index === store.selected ? selectedForeground(theme) : theme.text} flexShrink={0}>
++              <text fg={index === store.selected ? selectedForeground(theme, agentColor()) : theme.text} flexShrink={0}>
+                 {option().display}
+               </text>
+               <Show when={option().description}>
+-                <text fg={index === store.selected ? selectedForeground(theme) : theme.textMuted} wrapMode="none">
++                <text fg={index === store.selected ? selectedForeground(theme, agentColor()) : theme.textMuted} wrapMode="none">
+                   {" " + option().description?.trimStart()}
+                 </text>
+               </Show>
+diff --git a/packages/tui/src/component/prompt/index.tsx b/packages/tui/src/component/prompt/index.tsx
+index c48c751..29eb5ea 100644
+--- a/packages/tui/src/component/prompt/index.tsx
++++ b/packages/tui/src/component/prompt/index.tsx
+@@ -15,8 +15,8 @@ import path from "path"
+ import { fileURLToPath } from "url"
+ import { useLocal } from "../../context/local"
+ import { Flag } from "@opencode-ai/core/flag/flag"
+-import { tint, useTheme } from "../../context/theme"
+-import { EmptyBorder, SplitBorder } from "../../ui/border"
++import { useTheme } from "../../context/theme"
++import { useAgentColor } from "../../ui/use-agent-color"
+ import { useTuiPaths, useTuiTerminalEnvironment } from "../../context/runtime"
+ import { useClipboard } from "../../context/clipboard"
+ import { Spinner } from "../spinner"
+@@ -56,7 +56,6 @@ import { useTuiConfig } from "../../config"
+ import { usePromptWorkspace } from "./workspace"
+ import { usePromptMove } from "./move"
+ import { readLocalAttachment } from "./local-attachment"
+-import { useLocation } from "../../context/location"
+ 
+ registerOpencodeSpinner()
+ 
+@@ -96,11 +95,6 @@ export type PromptRef = {
+   submit(): void
+ }
+ 
+-const money = new Intl.NumberFormat("en-US", {
+-  style: "currency",
+-  currency: "USD",
+-})
+-
+ const DRAFT_RETENTION_MIN_CHARS = 20
+ 
+ function randomIndex(count: number) {
+@@ -147,9 +141,9 @@ export function Prompt(props: PromptProps) {
+ 
+   const leader = useLeaderActive()
+   const local = useLocal()
++  const agentColor = useAgentColor()
+   const args = useArgs()
+   const paths = useTuiPaths()
+-  const location = useLocation()
+   const terminalEnvironment = useTuiTerminalEnvironment()
+   const clipboard = useClipboard()
+   const sdk = useSDK()
+@@ -164,8 +158,6 @@ export function Prompt(props: PromptProps) {
+   const history = usePromptHistory()
+   const stash = usePromptStash()
+   const keymap = useOpencodeKeymap()
+-  const agentShortcut = useCommandShortcut("agent.cycle")
+-  const paletteShortcut = useCommandShortcut("command.palette.show")
+   const renderer = useRenderer()
+   const exit = useExit()
+   const dimensions = useTerminalDimensions()
+@@ -261,26 +253,6 @@ export function Prompt(props: PromptProps) {
+     return messages.findLast((m): m is UserMessage => m.role === "user")
+   })
+ 
+-  const usage = createMemo(() => {
+-    if (!props.sessionID) return
+-    const session = sync.session.get(props.sessionID)
+-    const msg = sync.data.message[props.sessionID] ?? []
+-    const last = msg.findLast((item): item is AssistantMessage => item.role === "assistant" && item.tokens.output > 0)
+-    if (!last) return
+-
+-    const tokens =
+-      last.tokens.input + last.tokens.output + last.tokens.reasoning + last.tokens.cache.read + last.tokens.cache.write
+-    if (tokens <= 0) return
+-
+-    const model = sync.data.provider.find((item) => item.id === last.providerID)?.models[last.modelID]
+-    const pct = model?.limit.context ? `${Math.round((tokens / model.limit.context) * 100)}%` : undefined
+-    const cost = session?.cost ?? 0
+-    return {
+-      context: pct ? `${Locale.number(tokens)} (${pct})` : Locale.number(tokens),
+-      cost: cost > 0 ? money.format(cost) : undefined,
+-    }
+-  })
+-
+   const [store, setStore] = createStore<{
+     prompt: PromptInfo
+     mode: "normal" | "shell"
+@@ -1306,8 +1278,6 @@ export function Prompt(props: PromptProps) {
+     () => !!local.agent.current() && store.mode === "normal" && showVariant(),
+     animationsEnabled,
+   )
+-  const borderHighlight = createMemo(() => tint(theme.border, highlight(), agentMetaAlpha()))
+-
+   const placeholderText = createMemo(() => {
+     if (props.showPlaceholder === false) return undefined
+     if (store.mode === "shell") {
+@@ -1350,12 +1320,6 @@ export function Prompt(props: PromptProps) {
+       <box ref={(r: BoxRenderable) => (anchor = r)} visible={props.visible !== false} width="100%">
+         <box
+           width="100%"
+-          border={["left"]}
+-          borderColor={borderHighlight()}
+-          customBorderChars={{
+-            ...SplitBorder.customBorderChars,
+-            bottomLeft: "╹",
+-          }}
+         >
+           <box
+             paddingLeft={2}
+@@ -1484,32 +1448,6 @@ export function Prompt(props: PromptProps) {
+             </box>
+           </box>
+         </box>
+-        <box
+-          height={1}
+-          border={["left"]}
+-          borderColor={borderHighlight()}
+-          customBorderChars={{
+-            ...EmptyBorder,
+-            vertical: theme.backgroundElement.a !== 0 ? "╹" : " ",
+-          }}
+-        >
+-          <box
+-            height={1}
+-            border={["bottom"]}
+-            borderColor={theme.backgroundElement}
+-            customBorderChars={
+-              theme.backgroundElement.a !== 0
+-                ? {
+-                    ...EmptyBorder,
+-                    horizontal: "▀",
+-                  }
+-                : {
+-                    ...EmptyBorder,
+-                    horizontal: " ",
+-                  }
+-            }
+-          />
+-        </box>
+         <box width="100%" flexDirection="row" justifyContent="space-between">
+           <Switch>
+             <Match when={status().type !== "idle"}>
+@@ -1521,7 +1459,7 @@ export function Prompt(props: PromptProps) {
+               >
+                 <box flexShrink={0} flexDirection="row" gap={1}>
+                   <box marginLeft={1}>
+-                    <Show when={kv.get("animations_enabled", true)} fallback={<text fg={theme.textMuted}>[⋯]</text>}>
++                    <Show when={kv.get("animations_enabled", true)}>
+                       <spinner color={spinnerDef().color} frames={spinnerDef().frames} interval={40} />
+                     </Show>
+                   </box>
+@@ -1584,12 +1522,12 @@ export function Prompt(props: PromptProps) {
+                     })()}
+                   </box>
+                 </box>
+-                <text fg={store.interrupt > 0 ? theme.primary : theme.text}>
+-                  esc{" "}
+-                  <span style={{ fg: store.interrupt > 0 ? theme.primary : theme.textMuted }}>
+-                    {store.interrupt > 0 ? "again to interrupt" : "interrupt"}
+-                  </span>
+-                </text>
++                <Show when={store.interrupt > 0}>
++                  <text fg={agentColor()}>
++                    esc{" "}
++                    <span style={{ fg: agentColor() }}>again to interrupt</span>
++                  </text>
++                </Show>
+               </box>
+             </Match>
+             <Match when={workspace.notice()}>
+@@ -1642,15 +1580,7 @@ export function Prompt(props: PromptProps) {
+                 <text fg={theme.accent}>(new working copy)</text>
+               </box>
+             </Match>
+-            <Match when={true}>
+-              {props.hint ?? (
+-                <Show when={props.sessionID} fallback={<text />}>
+-                  <box marginLeft={1}>
+-                    <text fg={theme.textMuted}>{location()?.directory ?? paths.cwd}</text>
+-                  </box>
+-                </Show>
+-              )}
+-            </Match>
++            <Match when={true}>{props.hint}</Match>
+           </Switch>
+           <Show when={status().type !== "retry"}>
+             <box gap={2} flexDirection="row">
+@@ -1660,25 +1590,6 @@ export function Prompt(props: PromptProps) {
+                 )}
+               </Show>
+               <Switch>
+-                <Match when={store.mode === "normal"}>
+-                  <Switch>
+-                    <Match when={usage()}>
+-                      {(item) => (
+-                        <text fg={theme.textMuted} wrapMode="none">
+-                          {[item().context, item().cost].filter(Boolean).join(" · ")}
+-                        </text>
+-                      )}
+-                    </Match>
+-                    <Match when={true}>
+-                      <text fg={theme.text}>
+-                        {agentShortcut()} <span style={{ fg: theme.textMuted }}>agents</span>
+-                      </text>
+-                    </Match>
+-                  </Switch>
+-                  <text fg={theme.text}>
+-                    {paletteShortcut()} <span style={{ fg: theme.textMuted }}>commands</span>
+-                  </text>
+-                </Match>
+                 <Match when={store.mode === "shell"}>
+                   <text fg={theme.text}>
+                     esc <span style={{ fg: theme.textMuted }}>exit shell mode</span>
+diff --git a/packages/tui/src/feature-plugins/system/diff-viewer-file-tree.tsx b/packages/tui/src/feature-plugins/system/diff-viewer-file-tree.tsx
+index cb15eaa..3fd7b8d 100644
+--- a/packages/tui/src/feature-plugins/system/diff-viewer-file-tree.tsx
++++ b/packages/tui/src/feature-plugins/system/diff-viewer-file-tree.tsx
+@@ -2,6 +2,7 @@
+ import type { ColorInput, RGBA, ScrollBoxRenderable } from "@opentui/core"
+ import { Locale } from "../../util/locale"
+ import { tint } from "../../context/theme"
++import { useAgentColor } from "../../ui/use-agent-color"
+ import { createEffect, createMemo, For, Match, Switch } from "solid-js"
+ import { buildFileTree, flattenFileTree, type FileTreeItem, type FileTreeRow } from "./diff-viewer-file-tree-utils"
+ import { Panel } from "./diff-viewer-ui"
+@@ -35,6 +36,7 @@ export type DiffViewerFileTreeProps = {
+ }
+ 
+ export function DiffViewerFileTree(props: DiffViewerFileTreeProps) {
++  const agentColor = useAgentColor()
+   const tree = createMemo(() => buildFileTree(props.files))
+   const rows = createMemo(() => flattenFileTree(tree(), props.expandedNodes))
+   let scroll: ScrollBoxRenderable | undefined
+@@ -82,7 +84,7 @@ export function DiffViewerFileTree(props: DiffViewerFileTreeProps) {
+                   <box
+                     flexDirection="row"
+                     width="100%"
+-                    backgroundColor={highlighted() ? props.theme.primary : undefined}
++                    backgroundColor={highlighted() ? agentColor() : undefined}
+                     onMouseUp={() => props.onRowClick?.(row)}
+                   >
+                     <text fg={highlighted() ? props.theme.background : fadedColor()} wrapMode="none" flexShrink={0}>
+@@ -94,7 +96,7 @@ export function DiffViewerFileTree(props: DiffViewerFileTreeProps) {
+                           highlighted()
+                             ? props.theme.background
+                             : selected()
+-                              ? props.theme.primary
++                              ? agentColor()
+                               : reviewed() || row.kind === "directory"
+                                 ? props.theme.textMuted
+                                 : props.theme.text
+diff --git a/packages/tui/src/routes/session/index.tsx b/packages/tui/src/routes/session/index.tsx
+index 2b54f21..22cf6a3 100644
+--- a/packages/tui/src/routes/session/index.tsx
++++ b/packages/tui/src/routes/session/index.tsx
+@@ -73,6 +73,7 @@ import { setPreLayoutSiblingMargin } from "../../util/layout"
+ import { useTuiConfig } from "../../config"
+ import { useClipboard } from "../../context/clipboard"
+ import { nextThinkingMode, reasoningSummary, useThinkingMode, type ThinkingMode } from "../../context/thinking"
++import { RsvpZone } from "../../ui/rsvp-zone"
+ import { getScrollAcceleration } from "../../util/scroll"
+ import { collapseToolOutput } from "../../util/collapse-tool-output"
+ import { usePluginRuntime } from "../../plugin/runtime"
+@@ -1154,6 +1155,28 @@ export function Session() {
+   // snap to bottom when session changes
+   createEffect(on(() => route.sessionID, toBottom))
+ 
++  // Slim top status: directory + context usage in the current agent color.
++  const moneyFmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
++  const topUsage = createMemo(() => {
++    const msg = sync.data.message[route.sessionID] ?? []
++    const last = msg.findLast((item): item is AssistantMessage => item.role === "assistant" && item.tokens.output > 0)
++    if (!last) return
++    const tokens =
++      last.tokens.input + last.tokens.output + last.tokens.reasoning + last.tokens.cache.read + last.tokens.cache.write
++    if (tokens <= 0) return
++    const model = sync.data.provider.find((item) => item.id === last.providerID)?.models[last.modelID]
++    const pct = model?.limit.context ? ` (${Math.round((tokens / model.limit.context) * 100)}%)` : ""
++    const cost = sync.session.get(route.sessionID)?.cost ?? 0
++    return `${Locale.number(tokens)}${pct}${cost > 0 ? ` · ${moneyFmt.format(cost)}` : ""}`
++  })
++  const topStatus = createMemo(() => {
++    const dir = location()?.directory ?? paths.cwd
++    const usage = topUsage()
++    const agent = local.agent.current()
++    const color = agent ? local.agent.color(agent.name) : theme.textMuted
++    return { text: usage ? `${dir} · ${usage}` : dir, color }
++  })
++
+   return (
+     <LocationProvider location={location()}>
+       <context.Provider
+@@ -1175,8 +1198,13 @@ export function Session() {
+         }}
+       >
+         <box flexDirection="row" flexGrow={1} minHeight={0}>
+-          <box flexGrow={1} minHeight={0} paddingBottom={1} paddingLeft={2} paddingRight={2} gap={1}>
++          <box flexGrow={1} minHeight={0} paddingBottom={1} paddingLeft={1} paddingRight={2} gap={1}>
+             <Show when={session()}>
++              <box flexDirection="row" justifyContent="flex-end" flexShrink={0} marginRight={-2}>
++                <text fg={topStatus().color} wrapMode="none">
++                  {topStatus().text}
++                </text>
++              </box>
+               <scrollbox
+                 ref={(r) => (scroll = r)}
+                 viewportOptions={{
+@@ -1190,7 +1218,7 @@ export function Session() {
+                     foregroundColor: theme.border,
+                   },
+                 }}
+-                stickyScroll={true}
++                stickyScroll={false}
+                 stickyStart="bottom"
+                 flexGrow={1}
+                 scrollAcceleration={scrollAcceleration()}
+@@ -1424,7 +1452,7 @@ function UserMessage(props: {
+                     const directory = file.mime === "application/x-directory"
+                     return (
+                       <text fg={theme.text}>
+-                        <span style={{ bg: theme.secondary, fg: theme.background }}>
++                        <span style={{ bg: theme.background, fg: theme.textMuted }}>
+                           {directory ? " Directory " : " File "}
+                         </span>
+                         <span style={{ bg: theme.backgroundElement, fg: theme.textMuted }}> {file.filename} </span>
+@@ -1605,6 +1633,15 @@ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: Ass
+   })
+   const summary = createMemo(() => reasoningSummary(content()))
+   const syntax = createSyntaxStyleMemo(() => generateSubtleSyntax(theme))
++  // RSVP thought-only: blocos desviados acumulam e entram no markdown final.
++  const [bypassText, setBypassText] = createSignal("")
++  // Cauda: thought fechou mas a fila ainda drena — só consolida ao esvaziar.
++  const [tailDone, setTailDone] = createSignal(false)
++  const fullBody = createMemo(() => {
++    const bypass = bypassText()
++    const body = summary().body
++    return bypass ? (body ? body + "\n\n" + bypass : bypass) : body
++  })
+ 
+   const toggle = () => {
+     if (!inMinimal() || opaque()) return
+@@ -1620,24 +1657,36 @@ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: Ass
+         flexDirection="column"
+         flexShrink={0}
+       >
+-        <box onMouseUp={toggle}>
+-          <ReasoningHeader
+-            toggleable={inMinimal() && !opaque()}
+-            open={!inMinimal() || expanded()}
+-            done={isDone()}
+-            title={summary().title}
+-            duration={isDone() ? Locale.duration(duration()) : undefined}
+-            encrypted={opaque()}
++        <Show
++          when={!opaque() && (!isDone() || !tailDone())}
++          fallback={
++            <box onMouseUp={toggle}>
++              <ReasoningHeader
++                toggleable={inMinimal() && !opaque()}
++                open={!inMinimal() || expanded()}
++                done={isDone()}
++                title={summary().title}
++                duration={isDone() ? Locale.duration(duration()) : undefined}
++                encrypted={opaque()}
++              />
++            </box>
++          }
++        >
++          <RsvpZone
++            text={content}
++            done={isDone}
++            onBypass={(c) => setBypassText((prev) => (prev ? prev + "\n\n" + c : c))}
++            onDrained={() => setTailDone(true)}
+           />
+-        </box>
+-        <Show when={!opaque() && (!inMinimal() || expanded()) && summary().body}>
++        </Show>
++        <Show when={!opaque() && (tailDone() || expanded()) && fullBody()}>
+           <box paddingLeft={inMinimal() ? 2 : 0} marginTop={1}>
+             <code
+               filetype="markdown"
+               drawUnstyledText={false}
+               streaming={true}
+               syntaxStyle={syntax()}
+-              content={summary().body}
++              content={fullBody()}
+               conceal={ctx.conceal()}
+               fg={theme.textMuted}
+             />
+@@ -1795,6 +1844,25 @@ type ToolProps = {
+   output?: string
+   part: ToolPart
+ }
++
++// Paths de arquivo: Tron fixo. (Modo continua via local.agent.color direto
++// no topo, workdir, autocomplete e bordas — só os paths saíram da dança.)
++const PATH_COLOR = RGBA.fromHex("#00d5ff")
++function useModeColor() {
++  return createMemo(() => PATH_COLOR)
++}
++
++// Cor de acento fixa por comando (o verbo identifica O QUÊ; o path na cor
++// do modo identifica ONDE). Paleta Vostok, 1 hue por comando.
++const TOOL_ACCENTS: Record<string, RGBA> = {
++  read: RGBA.fromHex("#5cb6ff"),
++  write: RGBA.fromHex("#7bff57"),
++  edit: RGBA.fromHex("#ffa34c"),
++  glob: RGBA.fromHex("#a87bff"),
++  grep: RGBA.fromHex("#f352ff"),
++  apply_patch: RGBA.fromHex("#ff2e63"),
++  shell: RGBA.fromHex("#ffd300"),
++}
+ function GenericTool(props: ToolProps) {
+   const { theme } = useTheme()
+   const ctx = use()
+@@ -2044,11 +2112,13 @@ function BlockTool(props: {
+ }
+ 
+ function Shell(props: ToolProps) {
+-  const { theme } = useTheme()
++  const { theme, syntax } = useTheme()
+   const pathFormatter = usePathFormatter()
++  const modeColor = useModeColor()
+   const ctx = use()
+   const isRunning = createMemo(() => props.part.state.status === "running")
+   const output = createMemo(() => stripAnsi(stringValue(props.metadata.output)?.trim() ?? ""))
++  const command = createMemo(() => stringValue(props.input.command) ?? "")
+   const [expanded, setExpanded] = createSignal(false)
+   const maxLines = 10
+   const maxChars = createMemo(() => maxLines * Math.max(20, ctx.width - 6))
+@@ -2066,26 +2136,34 @@ function Shell(props: ToolProps) {
+     return formatted
+   })
+ 
+-  const title = createMemo(() => {
+-    const wd = workdirDisplay()
+-    if (!wd) return
+-    return `# Running in ${wd}`
+-  })
+-
+   return (
+     <Switch>
+       <Match when={stringValue(props.metadata.output) !== undefined}>
+         <BlockTool
+-          title={title()}
+           part={props.part}
+           onClick={collapsed().overflow ? () => setExpanded((prev) => !prev) : undefined}
+         >
+           <box gap={1}>
+-            <Show when={isRunning()} fallback={<text fg={theme.text}>$ {stringValue(props.input.command)}</text>}>
+-              <Spinner color={theme.text}>{stringValue(props.input.command)}</Spinner>
++            <Show when={workdirDisplay()}>
++              {(wd) => (
++                <text fg={theme.textMuted}>
++                  <span style={{ fg: TOOL_ACCENTS.shell, bold: true }}># Running in</span> <span style={{ fg: modeColor(), bold: true }}>{wd()}</span>
++                </text>
++              )}
++            </Show>
++            <Show
++              when={isRunning()}
++              fallback={
++                <box flexDirection="row">
++                  <text fg={theme.text}>$ </text>
++                  <code conceal={false} fg={theme.text} filetype="bash" syntaxStyle={syntax()} content={command()} />
++                </box>
++              }
++            >
++              <Spinner color={theme.text}>{command()}</Spinner>
+             </Show>
+             <Show when={output()}>
+-              <text fg={theme.text}>{limited()}</text>
++              <code conceal={false} fg={theme.text} filetype="bash" syntaxStyle={syntax()} content={limited()} />
+             </Show>
+             <Show when={collapsed().overflow}>
+               <text fg={theme.textMuted}>{expanded() ? "Click to collapse" : "Click to expand"}</text>
+@@ -2105,6 +2183,7 @@ function Shell(props: ToolProps) {
+ function Write(props: ToolProps) {
+   const { theme, syntax } = useTheme()
+   const pathFormatter = usePathFormatter()
++  const modeColor = useModeColor()
+   const code = createMemo(() => {
+     return stringValue(props.input.content) ?? ""
+   })
+@@ -2112,7 +2191,10 @@ function Write(props: ToolProps) {
+   return (
+     <Switch>
+       <Match when={props.metadata.diagnostics !== undefined}>
+-        <BlockTool title={"# Wrote " + pathFormatter.format(stringValue(props.input.filePath))} part={props.part}>
++        <BlockTool part={props.part}>
++          <text fg={theme.textMuted}>
++            <span style={{ fg: TOOL_ACCENTS.write, bold: true }}># Wrote</span> <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(stringValue(props.input.filePath))}</span>
++          </text>
+           <line_number fg={theme.textMuted} minWidth={3} paddingRight={1}>
+             <code
+               conceal={false}
+@@ -2127,7 +2209,7 @@ function Write(props: ToolProps) {
+       </Match>
+       <Match when={true}>
+         <InlineTool icon="←" pending="Preparing write…" complete={stringValue(props.input.filePath)} part={props.part}>
+-          Write {pathFormatter.format(stringValue(props.input.filePath))}
++          <span style={{ fg: TOOL_ACCENTS.write, bold: true }}>Write</span> <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(stringValue(props.input.filePath))}</span>
+         </InlineTool>
+       </Match>
+     </Switch>
+@@ -2136,10 +2218,11 @@ function Write(props: ToolProps) {
+ 
+ function Glob(props: ToolProps) {
+   const pathFormatter = usePathFormatter()
++  const modeColor = useModeColor()
+   return (
+     <InlineTool icon="✱" pending="Finding files…" complete={stringValue(props.input.pattern)} part={props.part}>
+-      Glob "{stringValue(props.input.pattern)}"{" "}
+-      <Show when={stringValue(props.input.path)}>in {pathFormatter.format(stringValue(props.input.path))} </Show>
++      <span style={{ fg: TOOL_ACCENTS.glob, bold: true }}>Glob</span> "{stringValue(props.input.pattern)}"{" "}
++      <Show when={stringValue(props.input.path)}>in <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(stringValue(props.input.path))}</span> </Show>
+       <Show when={numberValue(props.metadata.count)}>
+         ({numberValue(props.metadata.count)} {numberValue(props.metadata.count) === 1 ? "match" : "matches"})
+       </Show>
+@@ -2150,6 +2233,7 @@ function Glob(props: ToolProps) {
+ function Read(props: ToolProps) {
+   const { theme } = useTheme()
+   const pathFormatter = usePathFormatter()
++  const modeColor = useModeColor()
+   const isRunning = createMemo(() => props.part.state.status === "running")
+   const loaded = createMemo(() => {
+     if (props.part.state.status !== "completed") return []
+@@ -2167,13 +2251,13 @@ function Read(props: ToolProps) {
+         spinner={isRunning()}
+         part={props.part}
+       >
+-        Read {pathFormatter.format(stringValue(props.input.filePath))} {input(props.input, ["filePath"])}
++        <span style={{ fg: TOOL_ACCENTS.read, bold: true }}>Read</span> <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(stringValue(props.input.filePath))}</span> {input(props.input, ["filePath"])}
+       </InlineTool>
+       <For each={loaded()}>
+         {(filepath) => (
+           <box paddingLeft={3}>
+             <text paddingLeft={3} fg={theme.textMuted}>
+-              ↳ Loaded {pathFormatter.format(filepath)}
++              ↳ Loaded <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(filepath)}</span>
+             </text>
+           </box>
+         )}
+@@ -2184,10 +2268,11 @@ function Read(props: ToolProps) {
+ 
+ function Grep(props: ToolProps) {
+   const pathFormatter = usePathFormatter()
++  const modeColor = useModeColor()
+   return (
+     <InlineTool icon="✱" pending="Searching content…" complete={stringValue(props.input.pattern)} part={props.part}>
+-      Grep "{stringValue(props.input.pattern)}"{" "}
+-      <Show when={stringValue(props.input.path)}>in {pathFormatter.format(stringValue(props.input.path))} </Show>
++      <span style={{ fg: TOOL_ACCENTS.grep, bold: true }}>Grep</span> "{stringValue(props.input.pattern)}"{" "}
++      <Show when={stringValue(props.input.path)}>in <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(stringValue(props.input.path))}</span> </Show>
+       <Show when={numberValue(props.metadata.matches)}>
+         ({numberValue(props.metadata.matches)} {numberValue(props.metadata.matches) === 1 ? "match" : "matches"})
+       </Show>
+@@ -2391,6 +2476,7 @@ function Edit(props: ToolProps) {
+   const ctx = use()
+   const { theme, syntax } = useTheme()
+   const pathFormatter = usePathFormatter()
++  const modeColor = useModeColor()
+ 
+   const view = createMemo(() => {
+     const diffStyle = ctx.tui.diff_style
+@@ -2406,7 +2492,10 @@ function Edit(props: ToolProps) {
+   return (
+     <Switch>
+       <Match when={stringValue(props.metadata.diff) !== undefined}>
+-        <BlockTool title={"← Edit " + pathFormatter.format(stringValue(props.input.filePath))} part={props.part}>
++        <BlockTool part={props.part}>
++          <text fg={theme.textMuted}>
++            <span style={{ fg: TOOL_ACCENTS.edit, bold: true }}>← Edit</span> <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(stringValue(props.input.filePath))}</span>
++          </text>
+           <box paddingLeft={1}>
+             <diff
+               diff={diffContent()}
+@@ -2433,7 +2522,7 @@ function Edit(props: ToolProps) {
+       </Match>
+       <Match when={true}>
+         <InlineTool icon="←" pending="Preparing edit…" complete={stringValue(props.input.filePath)} part={props.part}>
+-          Edit {pathFormatter.format(stringValue(props.input.filePath))} {input({ replaceAll: props.input.replaceAll })}
++          <span style={{ fg: TOOL_ACCENTS.edit, bold: true }}>Edit</span> <span style={{ fg: modeColor(), bold: true }}>{pathFormatter.format(stringValue(props.input.filePath))}</span> {input({ replaceAll: props.input.replaceAll })}
+         </InlineTool>
+       </Match>
+     </Switch>
+@@ -2444,6 +2533,7 @@ function ApplyPatch(props: ToolProps) {
+   const ctx = use()
+   const { theme, syntax } = useTheme()
+   const pathFormatter = usePathFormatter()
++  const modeColor = useModeColor()
+ 
+   const files = createMemo(() => parseApplyPatchFiles(props.metadata.files))
+ 
+@@ -2480,18 +2570,32 @@ function ApplyPatch(props: ToolProps) {
+   }
+ 
+   function title(file: { type: string; relativePath: string; filePath: string; deletions: number }) {
+-    if (file.type === "delete") return "# Deleted " + file.relativePath
+-    if (file.type === "add") return "# Created " + file.relativePath
+-    if (file.type === "move") return "# Moved " + pathFormatter.format(file.filePath) + " → " + file.relativePath
+-    return "← Patched " + file.relativePath
++    if (file.type === "delete") return { prefix: "# Deleted ", paths: [file.relativePath] }
++    if (file.type === "add") return { prefix: "# Created ", paths: [file.relativePath] }
++    if (file.type === "move")
++      return { prefix: "# Moved ", paths: [pathFormatter.format(file.filePath), file.relativePath] }
++    return { prefix: "← Patched ", paths: [file.relativePath] }
+   }
+ 
+   return (
+     <Switch>
+       <Match when={files().length > 0}>
+         <For each={files()}>
+-          {(file) => (
+-            <BlockTool title={title(file)} part={props.part}>
++          {(file) => {
++            const t = title(file)
++            return (
++              <BlockTool part={props.part}>
++                <text fg={theme.textMuted}>
++                  <span style={{ fg: TOOL_ACCENTS.apply_patch, bold: true }}>{t.prefix}</span>
++                  <For each={t.paths}>
++                    {(p, i) => (
++                      <span style={{ fg: modeColor(), bold: true }}>
++                        {i() > 0 ? "→ " : ""}
++                        {p}
++                      </span>
++                    )}
++                  </For>
++                </text>
+               <Show
+                 when={file.type !== "delete"}
+                 fallback={
+@@ -2503,13 +2607,14 @@ function ApplyPatch(props: ToolProps) {
+                 <Diff diff={file.patch} filePath={file.filePath} />
+                 <Diagnostics diagnostics={props.metadata.diagnostics} filePath={file.movePath ?? file.filePath} />
+               </Show>
+-            </BlockTool>
+-          )}
++              </BlockTool>
++            )
++          }}
+         </For>
+       </Match>
+       <Match when={true}>
+         <InlineTool icon="%" pending="Preparing patch…" failure="Patch failed" complete={false} part={props.part}>
+-          Patch
++          <span style={{ fg: TOOL_ACCENTS.apply_patch, bold: true }}>Patch</span>
+         </InlineTool>
+       </Match>
+     </Switch>
+diff --git a/packages/tui/src/routes/session/permission.tsx b/packages/tui/src/routes/session/permission.tsx
+index fbe3aac..5088d19 100644
+--- a/packages/tui/src/routes/session/permission.tsx
++++ b/packages/tui/src/routes/session/permission.tsx
+@@ -4,6 +4,7 @@ import { createMemo, For, Match, Show, Switch } from "solid-js"
+ import { Portal, useRenderer, useTerminalDimensions, type JSX } from "@opentui/solid"
+ import type { TextareaRenderable } from "@opentui/core"
+ import { useTheme, selectedForeground } from "../../context/theme"
++import { useAgentColor } from "../../ui/use-agent-color"
+ import type { PermissionRequest } from "@opencode-ai/sdk/v2"
+ import { useSDK } from "../../context/sdk"
+ import { SplitBorder } from "../../ui/border"
+@@ -443,6 +444,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
+ function RejectPrompt(props: { onConfirm: (message: string) => void; onCancel: () => void }) {
+   let input: TextareaRenderable
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const tuiConfig = useTuiConfig()
+   const dimensions = useTerminalDimensions()
+   const narrow = createMemo(() => dimensions().width < 80)
+@@ -506,7 +508,7 @@ function RejectPrompt(props: { onConfirm: (message: string) => void; onCancel: (
+           focused
+           textColor={theme.text}
+           focusedTextColor={theme.text}
+-          cursorColor={theme.primary}
++          cursorColor={agentColor()}
+           cursorStyle={tuiConfig.cursor}
+         />
+         <box flexDirection="row" gap={2} flexShrink={0}>
+diff --git a/packages/tui/src/routes/session/question.tsx b/packages/tui/src/routes/session/question.tsx
+index 5ab467a..2f96a7a 100644
+--- a/packages/tui/src/routes/session/question.tsx
++++ b/packages/tui/src/routes/session/question.tsx
+@@ -3,6 +3,7 @@ import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-j
+ import { useRenderer } from "@opentui/solid"
+ import type { TextareaRenderable } from "@opentui/core"
+ import { selectedForeground, tint, useTheme } from "../../context/theme"
++import { useAgentColor } from "../../ui/use-agent-color"
+ import type { QuestionAnswer, QuestionRequest } from "@opencode-ai/sdk/v2"
+ import { useSDK } from "../../context/sdk"
+ import { SplitBorder } from "../../ui/border"
+@@ -14,6 +15,7 @@ const QUESTION_MODE = "question"
+ export function QuestionPrompt(props: { request: QuestionRequest; directory?: string }) {
+   const sdk = useSDK()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const renderer = useRenderer()
+   const tuiConfig = useTuiConfig()
+   const modeStack = useOpencodeModeStack()
+@@ -440,7 +442,7 @@ export function QuestionPrompt(props: { request: QuestionRequest; directory?: st
+                         maxHeight={6}
+                         textColor={theme.text}
+                         focusedTextColor={theme.text}
+-                        cursorColor={theme.primary}
++                        cursorColor={agentColor()}
+                         cursorStyle={tuiConfig.cursor}
+                       />
+                     </box>
+diff --git a/packages/tui/src/routes/session/sidebar.tsx b/packages/tui/src/routes/session/sidebar.tsx
+index 0c5d2b3..6e7d3a2 100644
+--- a/packages/tui/src/routes/session/sidebar.tsx
++++ b/packages/tui/src/routes/session/sidebar.tsx
+@@ -41,7 +41,7 @@ export function Sidebar(props: { sessionID: string; overlay?: boolean }) {
+           verticalScrollbarOptions={{
+             trackOptions: {
+               backgroundColor: theme.background,
+-              foregroundColor: theme.borderActive,
++              foregroundColor: theme.border,
+             },
+           }}
+         >
+diff --git a/packages/tui/src/theme/index.ts b/packages/tui/src/theme/index.ts
+index e8a5f2c..7304b2c 100644
+--- a/packages/tui/src/theme/index.ts
++++ b/packages/tui/src/theme/index.ts
+@@ -686,11 +686,18 @@ function getSyntaxRules(theme: Theme) {
+       },
+     },
+     {
+-      scope: ["operator", "keyword.operator", "punctuation.delimiter"],
++      scope: ["keyword.operator"],
+       style: {
+         foreground: theme.syntaxOperator,
+       },
+     },
++    {
++      // Operadores e delimitadores em azul Tron (shell: | < > ; && = …)
++      scope: ["operator", "punctuation.delimiter", "punctuation.special"],
++      style: {
++        foreground: theme.syntaxPunctuation,
++      },
++    },
+     {
+       scope: ["keyword.conditional.ternary"],
+       style: {
+@@ -698,11 +705,25 @@ function getSyntaxRules(theme: Theme) {
+       },
+     },
+     {
+-      scope: ["variable", "variable.parameter", "function.method.call", "function.call"],
++      scope: ["variable"],
+       style: {
+         foreground: theme.syntaxVariable,
+       },
+     },
++    {
++      // Argumentos e parâmetros (shell e código) em Tron.
++      scope: ["variable.parameter"],
++      style: {
++        foreground: theme.syntaxPunctuation,
++      },
++    },
++    {
++      // Chamadas de função (inclui command_name do shell) em azul.
++      scope: ["function.method.call", "function.call"],
++      style: {
++        foreground: theme.syntaxFunction,
++      },
++    },
+     {
+       scope: ["variable.member", "function", "constructor"],
+       style: {
+diff --git a/packages/tui/src/ui/dialog-alert.tsx b/packages/tui/src/ui/dialog-alert.tsx
+index 9fe15de..3bb5c88 100644
+--- a/packages/tui/src/ui/dialog-alert.tsx
++++ b/packages/tui/src/ui/dialog-alert.tsx
+@@ -1,5 +1,6 @@
+ import { TextAttributes } from "@opentui/core"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "./use-agent-color"
+ import { useDialog, type DialogContext } from "./dialog"
+ import { useBindings } from "../keymap"
+ 
+@@ -12,6 +13,7 @@ export type DialogAlertProps = {
+ export function DialogAlert(props: DialogAlertProps) {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+ 
+   useBindings(() => ({
+     bindings: [
+@@ -43,7 +45,7 @@ export function DialogAlert(props: DialogAlertProps) {
+         <box
+           paddingLeft={3}
+           paddingRight={3}
+-          backgroundColor={theme.primary}
++          backgroundColor={agentColor()}
+           onMouseUp={() => {
+             props.onConfirm?.()
+             dialog.clear()
+diff --git a/packages/tui/src/ui/dialog-confirm.tsx b/packages/tui/src/ui/dialog-confirm.tsx
+index a09847a..3e6e548 100644
+--- a/packages/tui/src/ui/dialog-confirm.tsx
++++ b/packages/tui/src/ui/dialog-confirm.tsx
+@@ -1,5 +1,6 @@
+ import { TextAttributes } from "@opentui/core"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "./use-agent-color"
+ import { useDialog, type DialogContext } from "./dialog"
+ import { createStore } from "solid-js/store"
+ import { For } from "solid-js"
+@@ -19,6 +20,7 @@ export type DialogConfirmResult = boolean | undefined
+ export function DialogConfirm(props: DialogConfirmProps) {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const [store, setStore] = createStore({
+     active: "confirm" as "confirm" | "cancel",
+   })
+@@ -72,7 +74,7 @@ export function DialogConfirm(props: DialogConfirmProps) {
+             <box
+               paddingLeft={1}
+               paddingRight={1}
+-              backgroundColor={key === store.active ? theme.primary : undefined}
++              backgroundColor={key === store.active ? agentColor() : undefined}
+               onMouseUp={() => {
+                 if (key === "confirm") props.onConfirm?.()
+                 if (key === "cancel") props.onCancel?.()
+diff --git a/packages/tui/src/ui/dialog-export-options.tsx b/packages/tui/src/ui/dialog-export-options.tsx
+index f80f21a..4da0508 100644
+--- a/packages/tui/src/ui/dialog-export-options.tsx
++++ b/packages/tui/src/ui/dialog-export-options.tsx
+@@ -1,5 +1,6 @@
+ import { TextareaRenderable, TextAttributes } from "@opentui/core"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "./use-agent-color"
+ import { useDialog, type DialogContext } from "./dialog"
+ import { createStore } from "solid-js/store"
+ import { onMount, Show } from "solid-js"
+@@ -25,6 +26,7 @@ export type DialogExportOptionsProps = {
+ export function DialogExportOptions(props: DialogExportOptionsProps) {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const tuiConfig = useTuiConfig()
+   let textarea: TextareaRenderable
+   const [store, setStore] = createStore({
+@@ -129,10 +131,10 @@ export function DialogExportOptions(props: DialogExportOptionsProps) {
+           backgroundColor={store.active === "thinking" ? theme.backgroundElement : undefined}
+           onMouseUp={() => setStore("active", "thinking")}
+         >
+-          <text fg={store.active === "thinking" ? theme.primary : theme.textMuted}>
++          <text fg={store.active === "thinking" ? agentColor() : theme.textMuted}>
+             {store.thinking ? "[x]" : "[ ]"}
+           </text>
+-          <text fg={store.active === "thinking" ? theme.primary : theme.text}>Include thinking</text>
++          <text fg={store.active === "thinking" ? agentColor() : theme.text}>Include thinking</text>
+         </box>
+         <box
+           flexDirection="row"
+@@ -141,10 +143,10 @@ export function DialogExportOptions(props: DialogExportOptionsProps) {
+           backgroundColor={store.active === "toolDetails" ? theme.backgroundElement : undefined}
+           onMouseUp={() => setStore("active", "toolDetails")}
+         >
+-          <text fg={store.active === "toolDetails" ? theme.primary : theme.textMuted}>
++          <text fg={store.active === "toolDetails" ? agentColor() : theme.textMuted}>
+             {store.toolDetails ? "[x]" : "[ ]"}
+           </text>
+-          <text fg={store.active === "toolDetails" ? theme.primary : theme.text}>Include tool details</text>
++          <text fg={store.active === "toolDetails" ? agentColor() : theme.text}>Include tool details</text>
+         </box>
+         <box
+           flexDirection="row"
+@@ -153,10 +155,10 @@ export function DialogExportOptions(props: DialogExportOptionsProps) {
+           backgroundColor={store.active === "assistantMetadata" ? theme.backgroundElement : undefined}
+           onMouseUp={() => setStore("active", "assistantMetadata")}
+         >
+-          <text fg={store.active === "assistantMetadata" ? theme.primary : theme.textMuted}>
++          <text fg={store.active === "assistantMetadata" ? agentColor() : theme.textMuted}>
+             {store.assistantMetadata ? "[x]" : "[ ]"}
+           </text>
+-          <text fg={store.active === "assistantMetadata" ? theme.primary : theme.text}>Include assistant metadata</text>
++          <text fg={store.active === "assistantMetadata" ? agentColor() : theme.text}>Include assistant metadata</text>
+         </box>
+         <box
+           flexDirection="row"
+@@ -165,10 +167,10 @@ export function DialogExportOptions(props: DialogExportOptionsProps) {
+           backgroundColor={store.active === "openWithoutSaving" ? theme.backgroundElement : undefined}
+           onMouseUp={() => setStore("active", "openWithoutSaving")}
+         >
+-          <text fg={store.active === "openWithoutSaving" ? theme.primary : theme.textMuted}>
++          <text fg={store.active === "openWithoutSaving" ? agentColor() : theme.textMuted}>
+             {store.openWithoutSaving ? "[x]" : "[ ]"}
+           </text>
+-          <text fg={store.active === "openWithoutSaving" ? theme.primary : theme.text}>Open without saving</text>
++          <text fg={store.active === "openWithoutSaving" ? agentColor() : theme.text}>Open without saving</text>
+         </box>
+       </box>
+       <Show when={store.active !== "filename"}>
+diff --git a/packages/tui/src/ui/dialog-help.tsx b/packages/tui/src/ui/dialog-help.tsx
+index 1d49d60..3d8bbd2 100644
+--- a/packages/tui/src/ui/dialog-help.tsx
++++ b/packages/tui/src/ui/dialog-help.tsx
+@@ -1,11 +1,13 @@
+ import { TextAttributes } from "@opentui/core"
+ import { useTheme } from "../context/theme"
++import { useAgentColor } from "./use-agent-color"
+ import { useDialog } from "./dialog"
+ import { useBindings, useCommandShortcut } from "../keymap"
+ 
+ export function DialogHelp() {
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const agentColor = useAgentColor()
+   const commandShortcut = useCommandShortcut("command.palette.show")
+ 
+   useBindings(() => ({
+@@ -31,7 +33,7 @@ export function DialogHelp() {
+         </text>
+       </box>
+       <box flexDirection="row" justifyContent="flex-end" paddingBottom={1}>
+-        <box paddingLeft={3} paddingRight={3} backgroundColor={theme.primary} onMouseUp={() => dialog.clear()}>
++        <box paddingLeft={3} paddingRight={3} backgroundColor={agentColor()} onMouseUp={() => dialog.clear()}>
+           <text fg={theme.selectedListItemText}>ok</text>
+         </box>
+       </box>
+diff --git a/packages/tui/src/ui/dialog-select.tsx b/packages/tui/src/ui/dialog-select.tsx
+index df2913e..4b6415a 100644
+--- a/packages/tui/src/ui/dialog-select.tsx
++++ b/packages/tui/src/ui/dialog-select.tsx
+@@ -8,6 +8,7 @@ import {
+ } from "@opentui/core"
+ import type { Binding } from "@opentui/keymap"
+ import { useTheme, selectedForeground } from "../context/theme"
++import { useLocal } from "../context/local"
+ import { entries, filter, flatMap, groupBy, pipe } from "remeda"
+ import { batch, createEffect, createMemo, createSignal, For, Show, type JSX, on, onCleanup } from "solid-js"
+ import { createStore } from "solid-js/store"
+@@ -84,6 +85,12 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
+ 
+   const dialog = useDialog()
+   const { theme } = useTheme()
++  const local = useLocal()
++  // Navegação segue a cor do modo (vermelho build / Tron plan).
++  const agentColor = createMemo(() => {
++    const agent = local.agent.current()
++    return agent ? local.agent.color(agent.name) : theme.primary
++  })
+   const tuiConfig = useTuiConfig()
+   const scrollAcceleration = createMemo(() => getScrollAcceleration(tuiConfig))
+ 
+@@ -540,7 +547,7 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
+     return (
+       <box
+         flexDirection="row"
+-        backgroundColor={active() ? theme.primary : RGBA.fromInts(0, 0, 0, 0)}
++        backgroundColor={active() ? agentColor() : RGBA.fromInts(0, 0, 0, 0)}
+         onMouseUp={() => triggerAction(item)}
+       >
+         <text
+@@ -578,7 +585,7 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
+                 })
+               }}
+               focusedBackgroundColor={theme.backgroundPanel}
+-              cursorColor={theme.primary}
++              cursorColor={agentColor()}
+               cursorStyle={tuiConfig.cursor}
+               focusedTextColor={theme.textMuted}
+               ref={(r) => {
+@@ -623,7 +630,7 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
+                       <Show
+                         when={options[0]?.categoryView}
+                         fallback={
+-                          <text fg={theme.accent} attributes={TextAttributes.BOLD}>
++                          <text fg={agentColor()} attributes={TextAttributes.BOLD}>
+                             {category}
+                           </text>
+                         }
+@@ -673,7 +680,7 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
+                               active()
+                                 ? actionFocused()
+                                   ? theme.backgroundElement
+-                                  : (option.bg ?? theme.primary)
++                                  : (option.bg ?? agentColor())
+                                 : RGBA.fromInts(0, 0, 0, 0)
+                             }
+                           >
+@@ -743,11 +750,15 @@ function Option(props: {
+   onMouseOver?: () => void
+ }) {
+   const { theme } = useTheme()
++  const local = useLocal()
+   const fg = selectedForeground(theme)
+   const text = createMemo(() => {
+     if (props.active && !props.muted) return fg
+     if (props.muted && (props.active || props.current)) return theme.textMuted
+-    if (props.current) return theme.primary
++    if (props.current) {
++      const agent = local.agent.current()
++      return agent ? local.agent.color(agent.name) : theme.primary
++    }
+     return theme.text
+   })
+ 
+diff --git a/packages/tui/src/ui/rsvp-zone.tsx b/packages/tui/src/ui/rsvp-zone.tsx
+new file mode 100644
+index 0000000..c3419c0
+--- /dev/null
++++ b/packages/tui/src/ui/rsvp-zone.tsx
+@@ -0,0 +1,172 @@
++/** @jsxImportSource @opentui/solid */
++import { createEffect, createSignal, onCleanup, Show } from "solid-js"
++import { useTheme } from "../context/theme"
++import {
++  RSVP_ANCHOR_COL,
++  RSVP_STARVE_MS,
++  RsvpTokenizer,
++  type RsvpEvent,
++} from "../util/rsvp"
++
++type Props = {
++  // Texto acumulado do thought (content() do ReasoningPart). Só cresce.
++  text: () => string
++  // True quando o thought fechou (time.end). A zona drena a cauda em skim.
++  done: () => boolean
++  // Chamado p/ cada bloco desviado — o pai anexa ao markdown final.
++  onBypass?: (content: string) => void
++  // Fila zerada após done (ou teto da cauda): pode consolidar o markdown.
++  onDrained?: () => void
++}
++
++// Paleta da zona (canônico Spritz na forma, Vostok na cor): palavra UNIFORME
++// branca bold + SÓ a letra-pivô em VERMELHO BRILHANTE (#ff3e3e, o scoriaRed
++// oficial: +18% de luminância sobre o puro sem virar rosa).
++// Sem bg, sem peso dividido: marcação além da cor do pivô é ruído.
++export const RSVP_WORD_FG = "#ffffff" as const
++export const RSVP_ORP = "#ff3e3e" as const
++
++function widthOf(s: string): number {
++  try {
++    return Bun.stringWidth(s)
++  } catch {
++    return [...s].length
++  }
++}
++
++/**
++ * Zona RSVP thought-only: consome o stream do reasoning e exibe palavra por
++ * palavra com a ORP em vermelho, âncora em coluna fixa. Sem clique, sem
++ * replay — só ao vivo. Quando o thought fecha, o pai desmonta a zona.
++ */
++export function RsvpZone(props: Props) {
++  const { theme } = useTheme()
++  const tokenizer = new RsvpTokenizer()
++  let consumed = ""
++  let timer: ReturnType<typeof setTimeout> | undefined
++  let running = false
++
++  const [word, setWord] = createSignal("")
++  const [orp, setOrp] = createSignal(0)
++  const [seq, setSeq] = createSignal(0)
++  const [total, setTotal] = createSignal(0)
++  const [starved, setStarved] = createSignal(false)
++  const queue: RsvpEvent[] = []
++  let totalEvents = 0
++  let lastIngestAt = 0
++  let drainedNotified = false
++
++  const stop = () => {
++    running = false
++    if (timer !== undefined) {
++      clearTimeout(timer)
++      timer = undefined
++    }
++  }
++  onCleanup(stop)
++
++  const finishTail = () => {
++    queue.length = 0
++    stop()
++    if (!drainedNotified) {
++      drainedNotified = true
++      props.onDrained?.()
++    }
++  }
++
++  const tick = () => {
++    timer = undefined
++    const ev = queue.shift()
++    if (!ev) {
++      // Thought fechou e fila zerou: TUDO foi exibido → consolida.
++      if (props.done()) {
++        finishTail()
++        return
++      }
++      // Fila seca com stream vivo: mostra "···" em vez de silêncio.
++      // Publica só na transição (o re-cheque é a cada 300ms).
++      if (Date.now() - lastIngestAt > RSVP_STARVE_MS && !starved()) {
++        setStarved(true)
++      }
++      timer = setTimeout(tick, 300)
++      return
++    }
++    setStarved(false)
++    if (ev.type === "word") {
++      setWord(ev.word)
++      setOrp(ev.orpIndex)
++      setSeq(ev.seq)
++    }
++    running = true
++    // Ritmo CRAVADO: sem catch-up (ele variava a velocidade com a rajada).
++    // Rajada acumula na fila sem limite; a cauda drena tudo depois, no mesmo
++    // ritmo. Steady + completo, sem trade-off.
++    const delay = ev.type === "word" ? ev.delayMs : 0
++    timer = setTimeout(tick, Math.max(0, delay))
++  }
++
++  const kick = () => {
++    if (!running && queue.length > 0) {
++      running = true
++      timer = setTimeout(tick, 0)
++    }
++  }
++
++  const ingest = (events: RsvpEvent[]) => {
++    if (events.length > 0) lastIngestAt = Date.now()
++    setStarved(false)
++    for (const ev of events) {
++      // Total conta palavras + desvios: o denominador anda mesmo em código.
++      totalEvents += 1
++      setTotal(totalEvents)
++      if (ev.type === "bypass") {
++        props.onBypass?.(ev.content)
++        continue
++      }
++      queue.push(ev)
++    }
++    kick()
++  }
++
++  createEffect(() => {
++    const text = props.text()
++    const done = props.done()
++    if (!text.startsWith(consumed)) {
++      tokenizer.reset()
++      queue.length = 0
++      consumed = ""
++    }
++    const suffix = text.slice(consumed.length)
++    consumed = text
++    if (suffix) ingest(tokenizer.push(suffix))
++    // Thought fechou: descarrega a última palavra (segurada sem trailing
++    // space) + resto sem fecho. Sem isso, todo thought perdia o final.
++    if (done) ingest(tokenizer.flush())
++    // Done com fila zerada e loop parado: consolida sem esperar o timer.
++    if (props.done() && queue.length === 0) finishTail()
++  })
++
++  const chars = () => [...word()]
++  const before = () => chars().slice(0, orp()).join("")
++  const anchor = () => chars()[orp()] ?? ""
++  const after = () => chars().slice(orp() + 1).join("")
++  const pad = () => " ".repeat(Math.max(0, RSVP_ANCHOR_COL - widthOf(before())))
++
++  return (
++    <Show when={word() || starved()}>
++      <box marginTop={1} flexDirection="column" flexShrink={0}>
++        <text wrapMode="none">
++          <Show
++            when={!starved()}
++            fallback={<span style={{ fg: theme.textMuted }}>···</span>}
++          >
++            {pad()}
++            <span style={{ fg: RSVP_WORD_FG, bold: true }}>{before()}</span>
++            <span style={{ fg: RSVP_ORP, bold: true }}>{anchor()}</span>
++            <span style={{ fg: RSVP_WORD_FG, bold: true }}>{after()}</span>
++          </Show>
++        </text>
++      </box>
++    </Show>
++  )
++}
+diff --git a/packages/tui/src/ui/use-agent-color.ts b/packages/tui/src/ui/use-agent-color.ts
+new file mode 100644
+index 0000000..d73ac0b
+--- /dev/null
++++ b/packages/tui/src/ui/use-agent-color.ts
+@@ -0,0 +1,14 @@
++import { createMemo } from "solid-js"
++import { useTheme } from "../context/theme"
++import { useLocal } from "../context/local"
++
++// Cor do agente atual (vermelho build / Tron plan) p/ accents de navegação.
++// Cai pra theme.primary se não houver agente (comportamento original).
++export function useAgentColor() {
++  const { theme } = useTheme()
++  const local = useLocal()
++  return createMemo(() => {
++    const agent = local.agent.current()
++    return agent ? local.agent.color(agent.name) : theme.primary
++  })
++}
+diff --git a/packages/tui/src/util/collapse-tool-output.ts b/packages/tui/src/util/collapse-tool-output.ts
+index 4b4c8d8..5f80848 100644
+--- a/packages/tui/src/util/collapse-tool-output.ts
++++ b/packages/tui/src/util/collapse-tool-output.ts
+@@ -1,19 +1,7 @@
++// Fork: tool output sempre expandido por padrão — sem "Click to expand".
++// (upstream colapsa após maxLines/maxChars; aqui os limites são ignorados.)
+ export function collapseToolOutput(output: string, maxLines: number, maxChars: number) {
+-  const lines = output.split("\n")
+-  if (lines.length <= maxLines && Array.from(output).length <= maxChars) {
+-    return { output, overflow: false }
+-  }
+-
+-  const preview = lines.slice(0, maxLines).join("\n")
+-  if (Array.from(preview).length > maxChars) {
+-    return {
+-      output:
+-        Array.from(preview)
+-          .slice(0, Math.max(0, maxChars - 1))
+-          .join("") + "…",
+-      overflow: true,
+-    }
+-  }
+-
+-  return { output: [...lines.slice(0, maxLines), "…"].join("\n"), overflow: true }
++  void maxLines
++  void maxChars
++  return { output, overflow: false }
+ }
+diff --git a/packages/tui/src/util/rsvp.ts b/packages/tui/src/util/rsvp.ts
+new file mode 100644
+index 0000000..c04a4cf
+--- /dev/null
++++ b/packages/tui/src/util/rsvp.ts
+@@ -0,0 +1,211 @@
++// RSVP (Rapid Serial Visual Presentation) — tokenizer de streaming p/ o thought.
++//
++// ORP + timing adaptados de SeanZoR/claude-speed-reader (MIT, © 2025 Sean Oliver):
++//   orp = len>13 ? 4 : [0,0,1,1,1,1,2,2,2,2,3,3,3,3][len]
++//   2.2x em [.!?]$, 1.5x em [,;:]$ , 1.1x em palavra longa.
++// Centralização por padding-à-esquerda (ideia de freeduck/speed-reader —
++// AGPL, reimplementada aqui, nenhum código copiado).
++
++export const RSVP_WPM = 450
++export const RSVP_BASE_MS = Math.round(60000 / RSVP_WPM) // 133ms
++export const RSVP_FLOOR_MS = 80 // piso anti-rajada (guarda; nunca atinge a 150WPM)
++// Sem teto, sem timeout, ritmo CRAVADO (decisão do usuário): o thought
++// inteiro é exibido a 300 WPM, palavra por palavra, e só então vira texto.
++// Rajada acumula na fila sem limite; a cauda drena tudo depois, no mesmo ritmo.
++// Sem palavra nova há mais de X com stream vivo: mostra "···" em vez de silêncio.
++export const RSVP_STARVE_MS = 1000
++// Coluna (dentro da zona) onde a letra-âncora ORP fica parada.
++export const RSVP_ANCHOR_COL = 14
++
++export type RsvpEvent =
++  | { type: "word"; word: string; orpIndex: number; delayMs: number; seq: number }
++  // Conteúdo desviado (código, hashes…): NÃO entra no player; o componente
++  // acumula e anexa ao markdown final quando o thought fecha. Lossless.
++  | { type: "bypass"; content: string }
++
++export function orpIndex(word: string): number {
++  const len = [...word].length
++  if (len > 13) return 4
++  return [0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3][len] ?? 4
++}
++
++export function frameDelay(word: string, baseMs = RSVP_BASE_MS): number {
++  let t = baseMs
++  if (/[.!?]$/.test(word)) t *= 2.2
++  else if (/[,;:]$/.test(word)) t *= 1.5
++  if ([...word].length > 10) t *= 1.1
++  return Math.max(RSVP_FLOOR_MS, Math.round(t))
++}
++
++const LONG_DIGITS = /(?:\d{7,}|[0-9a-f]{8,}|[0-9a-f]{8}-[0-9a-f]{4}-)/i
++// Símbolos soltos de formatação/tokenização: descartados do player.
++const JUNK = /^[*_#~|\->—–·•◦▪]+$/
++const CURRENCY_PREFIX = /^(R\$|\$|€|£)\d*$/
++const NUMERIC = /^\d/
++
++function stripMarkdown(word: string): string {
++  // Remove marcadores (** _ # > ` ~) das bordas, preservando pontuação
++  // terminal (.,!?;:) que alimenta o cálculo de delay.
++  let w = word.replace(/^([*_#>`~]+)/, "")
++  w = w.replace(/([*_`~]+)$/, "")
++  return w
++}
++
++function isBypassToken(token: string): boolean {
++  if (LONG_DIGITS.test(token)) return true
++  if (token.includes("](")) return true // link markdown pesado
++  if (token.includes("|")) return true // célula/pipe de tabela
++  return false
++}
++
++function isTableRow(line: string): boolean {
++  const t = line.trim()
++  return t.startsWith("|") && (t.match(/\|/g) || []).length >= 2
++}
++
++/**
++ * Máquina de estados p/ chunks de streaming. `push` recebe o SUFIXO novo do
++ * texto (o componente difere por prefixo) e emite eventos completos; o resto
++ * incompleto fica bufferizado. `flush` fecha no `time.end`.
++ *
++ * Chunk-split é first-class: fence/inline-code sem fecho segura o buffer
++ * até o fecho chegar (ou até o flush, que desvia como bypass — lossless).
++ */
++export class RsvpTokenizer {
++  private buffer = ""
++  private seq = 0
++  private inFence = false
++
++  get pending(): number {
++    return this.buffer.length
++  }
++
++  push(chunk: string): RsvpEvent[] {
++    if (!chunk) return []
++    this.buffer += chunk
++    return this.drain(false)
++  }
++
++  flush(): RsvpEvent[] {
++    const out = this.drain(true)
++    // Resto sem fecho: desvia como bypass (lossless) em vez de adivinhar.
++    if (this.buffer.trim()) {
++      out.push({ type: "bypass", content: this.buffer })
++      this.buffer = ""
++    }
++    this.inFence = false
++    return out
++  }
++
++  reset() {
++    this.buffer = ""
++    this.seq = 0
++    this.inFence = false
++  }
++
++  private emitWord(raw: string, out: RsvpEvent[]) {
++    const word = stripMarkdown(raw)
++    if (!word) return
++    // Bypass antes do junk: "|" solitário é pipe de tabela, não lixo.
++    if (isBypassToken(word)) {
++      out.push({ type: "bypass", content: raw })
++      return
++    }
++    if (JUNK.test(word)) return
++    this.seq += 1
++    out.push({ type: "word", word, orpIndex: orpIndex(word), delayMs: frameDelay(word), seq: this.seq })
++  }
++
++  private drain(final: boolean): RsvpEvent[] {
++    const out: RsvpEvent[] = []
++    let text = this.buffer
++    let consumed = 0
++
++    const takeWords = (segment: string) => {
++      // Linha de tabela ("| a | b |") desvia inteira; prosa com pipe
++      // avulso cai na regra por-token (lossless, só afeta o ritmo).
++      // Junta prefixo de moeda ("R$", "$") ao numeral seguinte ("R$ 500").
++      // Moeda é casada ANTES da regra de shell ($) — ordem intencional.
++      for (const line of segment.split(/\r?\n/)) {
++        if (!line.trim()) continue
++        if (isTableRow(line)) {
++          out.push({ type: "bypass", content: line.trim() })
++          continue
++        }
++        const parts = line.split(/(\s+)/)
++        const words: string[] = []
++        for (let i = 0; i < parts.length; i++) {
++          const p = parts[i]
++          if (!p || /^\s+$/.test(p)) continue
++          const next = parts[i + 2]
++          if (CURRENCY_PREFIX.test(p) && next !== undefined && NUMERIC.test(next)) {
++            words.push(p + " " + next)
++            i += 2
++          } else {
++            words.push(p)
++          }
++        }
++        for (const w of words) this.emitWord(w, out)
++      }
++    }
++
++    while (true) {
++      if (this.inFence) {
++        const close = text.indexOf("```", consumed)
++        if (close === -1) break // fecho ainda não chegou
++        out.push({ type: "bypass", content: text.slice(consumed, close + 3) })
++        consumed = close + 3
++        this.inFence = false
++        continue
++      }
++      const open = text.indexOf("```", consumed)
++      const tick = text.indexOf("`", consumed)
++      if (open !== -1 && (tick === -1 || open <= tick)) {
++        // Prosa antes da fence vai pro player; fence segura o buffer.
++        takeWords(text.slice(consumed, open))
++        consumed = open // avança mesmo segurando: evita reemitir a prosa
++        // Conta backticks de abertura (chunk-split: pode vir 1-2 por vez).
++        let end = open
++        while (text[end] === "`" && end - open < 3) end++
++        if (end - open < 3 && !final) break // abertura incompleta, espera
++        out.push({ type: "bypass", content: text.slice(open, end) })
++        consumed = end
++        this.inFence = true
++        continue
++      }
++      if (tick !== -1) {
++        const close = text.indexOf("`", tick + 1)
++        if (close === -1) {
++          takeWords(text.slice(consumed, tick))
++          consumed = tick // avança mesmo segurando: evita reemitir a prosa
++          if (final) {
++            // Backtick solitário no fim: descarta o char, emite o resto.
++            takeWords(text.slice(tick + 1))
++            consumed = text.length
++          }
++          break
++        }
++        takeWords(text.slice(consumed, tick))
++        out.push({ type: "bypass", content: text.slice(tick, close + 1) })
++        consumed = close + 1
++        continue
++      }
++      // Só prosa: emite tudo até a última quebra; última palavra pode estar
++      // incompleta (sem whitespace após) → segura, salvo flush.
++      const tail = text.slice(consumed)
++      if (!final) {
++        const m = tail.match(/^(.*\s)(\S*)$/s)
++        if (!m) break
++        takeWords(m[1])
++        consumed += m[1].length
++        break
++      }
++      takeWords(tail)
++      consumed = text.length
++      break
++    }
++
++    this.buffer = text.slice(consumed)
++    return out
++  }
++}
+diff --git a/packages/tui/test/util/rsvp-zone.test.tsx b/packages/tui/test/util/rsvp-zone.test.tsx
+new file mode 100644
+index 0000000..7d49740
+--- /dev/null
++++ b/packages/tui/test/util/rsvp-zone.test.tsx
+@@ -0,0 +1,153 @@
++/** @jsxImportSource @opentui/solid */
++import { testRender } from "@opentui/solid"
++import { expect, test } from "bun:test"
++import { mkdir } from "node:fs/promises"
++import path from "node:path"
++import { createSignal } from "solid-js"
++import { tmpdir } from "../fixture/fixture"
++import { createTuiResolvedConfig } from "../fixture/tui-runtime"
++import { TestTuiContexts } from "../fixture/tui-environment"
++
++async function wait(fn: () => boolean, timeout = 8000) {
++  const start = Date.now()
++  while (!fn()) {
++    if (Date.now() - start > timeout) throw new Error("timed out waiting for condition")
++    await Bun.sleep(25)
++  }
++}
++
++function frame(app: { captureCharFrame: () => string }) {
++  return app.captureCharFrame()
++}
++
++async function mountZone(input: {
++  root: string
++  initial: string
++  onBypass: (c: string) => void
++  onDrained?: () => void
++  done?: () => boolean
++}) {
++  const state = path.join(input.root, "state")
++  await mkdir(state, { recursive: true })
++  await Bun.write(path.join(state, "kv.json"), "{}")
++
++  const [{ KVProvider }, { TuiConfigProvider }, { ThemeProvider }, { RsvpZone }] = await Promise.all([
++    import("../../src/context/kv"),
++    import("../../src/config"),
++    import("../../src/context/theme"),
++    import("../../src/ui/rsvp-zone"),
++  ])
++
++  const [text, setText] = createSignal(input.initial)
++
++  function Harness() {
++    const resolvedConfig = createTuiResolvedConfig({})
++    return (
++      <TestTuiContexts
++        directory={input.root}
++        paths={{ home: input.root, state, worktree: input.root }}
++      >
++        <TuiConfigProvider config={resolvedConfig}>
++          <KVProvider>
++            <ThemeProvider mode="dark">
++              <RsvpZone
++                text={text}
++                done={input.done ?? (() => false)}
++                onBypass={input.onBypass}
++                onDrained={input.onDrained}
++              />
++            </ThemeProvider>
++          </KVProvider>
++        </TuiConfigProvider>
++      </TestTuiContexts>
++    )
++  }
++
++  const app = await testRender(() => <Harness />, { width: 80, height: 6 })
++  return { app, setText, cleanup: () => app.renderer.destroy() }
++}
++
++test("rsvp zone drena palavras com contador progressivo", async () => {
++  await using tmp = await tmpdir()
++  const bypassed: string[] = []
++  const zone = await mountZone({ root: tmp.path, initial: "", onBypass: (c) => bypassed.push(c) })
++  try {
++    zone.setText("O rato roeu a roupa. ")
++    await wait(() => frame(zone.app).includes("rato"))
++    await wait(() => frame(zone.app).includes("roupa."))
++    expect(frame(zone.app)).toContain("roupa.")
++    expect(frame(zone.app)).not.toMatch(/\d+\/\d+/)
++    expect(bypassed).toEqual([])
++  } finally {
++    zone.cleanup()
++  }
++})
++
++test("rsvp zone não come a última palavra (flush no done)", async () => {
++  await using tmp = await tmpdir()
++  const [done, setDone] = createSignal(false)
++  let drained = false
++  const zone = await mountZone({
++    root: tmp.path,
++    initial: "",
++    onBypass: () => {},
++    done,
++    onDrained: () => {
++      drained = true
++    },
++  })
++  try {
++    // Sem trailing space (igual o content() trimado do ReasoningPart):
++    // a última palavra fica segurada até o flush do done.
++    zone.setText("o fim")
++    await wait(() => frame(zone.app).includes("o"))
++    expect(frame(zone.app)).not.toContain("fim")
++    setDone(true)
++    await wait(() => frame(zone.app).includes("fim"))
++    await wait(() => drained)
++    expect(drained).toBe(true)
++  } finally {
++    zone.cleanup()
++  }
++})
++
++test("rsvp zone drena cauda após done e avisa onDrained", async () => {
++  await using tmp = await tmpdir()
++  const [done, setDone] = createSignal(false)
++  let drained = false
++  const zone = await mountZone({
++    root: tmp.path,
++    initial: "",
++    onBypass: () => {},
++    done,
++    onDrained: () => {
++      drained = true
++    },
++  })
++  try {
++    // Enfileira 3 palavras e fecha o thought no meio da drenagem.
++    zone.setText("um dois três ")
++    await wait(() => frame(zone.app).includes("dois"))
++    setDone(true)
++    // Cauda em skim (~130ms/palavra): drena e dispara onDrained.
++    await wait(() => drained)
++    expect(drained).toBe(true)
++    expect(frame(zone.app)).toContain("três")
++  } finally {
++    zone.cleanup()
++  }
++})
++
++test("rsvp zone desvia fence e continua na prosa", async () => {
++  await using tmp = await tmpdir()
++  const bypassed: string[] = []
++  const zone = await mountZone({ root: tmp.path, initial: "veja ", onBypass: (c) => bypassed.push(c) })
++  try {
++    zone.setText("veja ```ts\nconst a = 1\n``` depois ")
++    await wait(() => bypassed.length > 0)
++    expect(bypassed.join("\n")).toContain("const a = 1")
++    await wait(() => frame(zone.app).includes("depois"))
++  } finally {
++    zone.cleanup()
++  }
++})
+diff --git a/packages/tui/test/util/rsvp.test.ts b/packages/tui/test/util/rsvp.test.ts
+new file mode 100644
+index 0000000..a84fc94
+--- /dev/null
++++ b/packages/tui/test/util/rsvp.test.ts
+@@ -0,0 +1,135 @@
++import { describe, expect, test } from "bun:test"
++import { frameDelay, orpIndex, RSVP_BASE_MS, RsvpTokenizer } from "../../src/util/rsvp"
++
++describe("orpIndex", () => {
++  test("tabela ~1/3 (base SeanZoR)", () => {
++    expect(orpIndex("a")).toBe(0)
++    expect(orpIndex("oi")).toBe(1)
++    expect(orpIndex("casa!")).toBe(1)
++    expect(orpIndex("palavra")).toBe(2)
++    expect(orpIndex("rapidamente")).toBe(3)
++    expect(orpIndex("computadores")).toBe(3)
++    expect(orpIndex("inconstitucionalmente")).toBe(4)
++  })
++})
++
++describe("frameDelay", () => {
++  test("base 133ms @450WPM", () => {
++    expect(RSVP_BASE_MS).toBe(133)
++    expect(frameDelay("casa")).toBe(133)
++  })
++  test("fim de frase 2.2x", () => {
++    expect(frameDelay("fim.")).toBe(293)
++    expect(frameDelay("oi!")).toBe(293)
++    expect(frameDelay("quê?")).toBe(293)
++  })
++  test("vírgula 1.5x", () => {
++    expect(frameDelay("logo,")).toBe(200)
++    expect(frameDelay("nota;")).toBe(200)
++  })
++  test("palavra longa 1.1x", () => {
++    expect(frameDelay("extraordinário")).toBe(146)
++  })
++})
++
++function words(t: RsvpTokenizer, chunk: string) {
++  return t.push(chunk).filter((e) => e.type === "word")
++}
++
++describe("RsvpTokenizer", () => {
++  test("prosa simples, pontuação colada", () => {
++    const t = new RsvpTokenizer()
++    const evs = words(t, "O rato roeu a roupa. ")
++    expect(evs.map((e) => (e.type === "word" ? e.word : null))).toEqual(["O", "rato", "roeu", "a", "roupa."])
++    expect(evs.map((e) => (e.type === "word" ? e.seq : null))).toEqual([1, 2, 3, 4, 5])
++  })
++
++  test("última palavra sem trailing space segura até flush", () => {
++    const t = new RsvpTokenizer()
++    expect(words(t, "incomple")).toEqual([])
++    const flushed = t.flush().filter((e) => e.type === "word")
++    expect(flushed.map((e) => (e.type === "word" ? e.word : null))).toEqual(["incomple"])
++  })
++
++  test("lixo de formatação descartado", () => {
++    const t = new RsvpTokenizer()
++    const evs = words(t, "* item # titulo - ok ")
++    expect(evs.map((e) => (e.type === "word" ? e.word : null))).toEqual(["item", "titulo", "ok"])
++  })
++
++  test("bold markdown limpo, delay preservado", () => {
++    const t = new RsvpTokenizer()
++    const evs = t.push("**fim.** ")
++    expect(evs[0]).toMatchObject({ type: "word", word: "fim.", delayMs: 293 })
++  })
++
++  test("abertura parcial de fence não reemite prosa (sem duplicata)", () => {
++    const t = new RsvpTokenizer()
++    const a = t.push("penso `")
++    const b = t.push("`ainda ")
++    const all = [...a, ...b].filter((e) => e.type === "word")
++    // "penso" aparece exatamente 1x; "``" vira bypass vazio, "ainda" é prosa
++    expect(all.map((e) => (e.type === "word" ? e.word : null))).toEqual(["penso", "ainda"])
++  })
++
++  test("backtick solitário parcial não reemite prosa", () => {
++    const t = new RsvpTokenizer()
++    const a = t.push("olha `x")
++    const b = t.push("yz` fim ")
++    const all = [...a, ...b].filter((e) => e.type === "word")
++    expect(all.map((e) => (e.type === "word" ? e.word : null))).toEqual(["olha", "fim"])
++  })
++
++  test("fence em chunk único desvia", () => {
++    const t = new RsvpTokenizer()
++    const evs = t.push("veja ```ts\nconst a = 1\n``` depois ")
++    const types = evs.map((e) => e.type)
++    expect(types).toContain("bypass")
++    const last = evs[evs.length - 1]
++    expect(last).toMatchObject({ type: "word", word: "depois" })
++  })
++
++  test("fence quebrado em 3 chunks (chunk-split)", () => {
++    const t = new RsvpTokenizer()
++    const a = t.push("penso ```")
++    const b = t.push("py\nprint(1)\n")
++    const c = t.push("``` ok ")
++    const all = [...a, ...b, ...c]
++    expect(all.filter((e) => e.type === "bypass").length).toBeGreaterThanOrEqual(1)
++    expect(all.map((e) => (e.type === "word" ? e.word : null)).filter(Boolean)).toEqual(["penso", "ok"])
++  })
++
++  test("inline code desvia, volta pra prosa", () => {
++    const t = new RsvpTokenizer()
++    const evs = t.push("rode `bun test` agora ")
++    expect(evs.map((e) => e.type)).toEqual(["word", "bypass", "word"])
++    expect(evs[1]).toMatchObject({ type: "bypass", content: "`bun test`" })
++  })
++
++  test("moeda junta (R$ 500), shell $12 sozinho", () => {
++    const t = new RsvpTokenizer()
++    const evs = words(t, "custa R$ 500 hoje ")
++    expect(evs.map((e) => (e.type === "word" ? e.word : null))).toContain("R$ 500")
++  })
++
++  test("digitões, hash e UUID desviam", () => {
++    const t = new RsvpTokenizer()
++    const evs = t.push("id 1234567890 hash deadbeef1234 uuid 123e4567-e89b-12d3- fim ")
++    expect(evs.filter((e) => e.type === "bypass")).toHaveLength(3)
++    expect(evs[evs.length - 1]).toMatchObject({ type: "word", word: "fim" })
++  })
++
++  test("link pesado e tabela desviam", () => {
++    const t = new RsvpTokenizer()
++    const evs = t.push("veja [doc](http://x)\n| a | b |\nfim ")
++    expect(evs.filter((e) => e.type === "bypass")).toHaveLength(2)
++    expect(evs[evs.length - 1]).toMatchObject({ type: "word", word: "fim" })
++  })
++
++  test("flush sem fecho desvia resto (lossless)", () => {
++    const t = new RsvpTokenizer()
++    t.push("texto ```aberto")
++    const flushed = t.flush()
++    expect(flushed.some((e) => e.type === "bypass")).toBe(true)
++  })
++})

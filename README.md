@@ -19,7 +19,7 @@ OpenCode TUI (shell commands with tree-sitter highlight):
 | Role | Hex | Notes |
 |---|---|---|
 | Background | `#000000` | Absolute black, everywhere |
-| Variable / property | `#ff0000` | The reddest red there is |
+| Variable / property | `#ff2a00` | Scarlet — exact inverse of Tron `#00d5ff` |
 | Keyword | `#f352ff` | Neon magenta |
 | Type / class | `#ffb81a` | Neon gold |
 | String | `#7bff57` | Neon green |
@@ -82,15 +82,38 @@ Activate in `~/.config/opencode/tui.json`:
 
 Or switch live with `/theme`.
 
-Bonus: per-mode colors in `~/.config/opencode/opencode.json` — red build, Tron-blue plan:
+Bonus: per-mode colors in `~/.config/opencode/opencode.json` — scarlet build, Tron-blue plan:
 
 ```json
 {
   "agent": {
-    "build": { "color": "#ff0000" },
+    "build": { "color": "#ff2a00" },
     "plan": { "color": "#00d5ff" }
   }
 }
+```
+
+## TUI patch (`opencode/tui-vostok-1.18.30.patch`)
+
+The theme alone doesn't cover behavior. This patch (against
+[opencode](https://github.com/anomalyco/opencode) `v1.18.30`) adds:
+
+- **RSVP thought player** — streaming reasoning rendered word-by-word with
+  ORP pivot (450 WPM, no-drop queue, post-done tail drain, canonical
+  Spritz styling), in place of the collapsed thinking header
+- **Agent-colored navigation** — selections and chrome follow the mode color
+- **Shell tree-sitter highlight**, always-expanded output, no animations,
+  sticky autoscroll off
+
+Apply + rebuild (needs [bun 1.3.14](https://bun.sh), binary reports `1.18.30`):
+
+```sh
+git clone --branch v1.18.30 --depth 1 https://github.com/anomalyco/opencode.git
+cd opencode
+git apply /path/to/tui-vostok-1.18.30.patch
+OPENCODE_VERSION=1.18.30 bun run script/build.ts --single --skip-embed-web-ui --skip-install
+cp dist/opencode-linux-x64/bin/opencode ~/.opencode/bin/opencode.new
+mv ~/.opencode/bin/opencode.new ~/.opencode/bin/opencode
 ```
 
 ## Why these choices

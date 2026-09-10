@@ -1,6 +1,6 @@
 -- Vostok — tema neon Soviet-grade para Neovim.
 -- Baseado no Scoria (zyplos/scoria) com saturação turbinada + azul Tron.
--- Sintaxe: variável #ff0000 | keyword #f352ff | tipo #ffb81a | string #7bff57
+-- Sintaxe: variável #ff2a00 | keyword #f352ff | tipo #ffb81a | string #7bff57
 --   função #5cb6ff | operador/regex #1aefff | número #ffa34c | texto #a4b0c6
 --   delimitadores ;,.: #00d5ff | UI OLED #000 + accent #ff3e3e.
 vim.cmd("hi clear")
@@ -19,7 +19,7 @@ local p = {
   fg      = "#ebebeb", -- editor.foreground
   border  = "#444444", -- bordas do Scoria
   borderH = "#ff3e3e", -- bordas de foco / accent
-  varR    = "#ff0000", -- variável — VERMELHO PURO, o mais vermelho que existe
+  varR    = "#ff2a00", -- variável — ESCARLATE, inverso exato do Tron #00d5ff
   kwM     = "#f352ff", -- keyword — neon magenta
   typeA   = "#ffb81a", -- tipo — neon dourado
   strG    = "#7bff57", -- string — neon verde
