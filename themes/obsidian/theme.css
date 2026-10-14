@@ -7,7 +7,7 @@
      2. AZUL NÃO é cor semântica (só metadata/estrutura)
      3. Quente carrega significado (rampa fogo vermelho→laranja→dourado)
      4. Estrutura/delimitadores nunca apagados
-   Chrome: OLED absoluto (#000 em tudo), separação só por borda #2b2b2b.
+   Chrome: OLED absoluto (#000); hover/seleção em tinta de acento (nunca cinza).
    ============================================================================ */
 
 /* @settings
@@ -42,7 +42,7 @@ settings:
 
 /* ---------------------------------------------------------------- dark only */
 .theme-dark {
-  /* --- neutros base: absoluto #000 (só bordas quebram o preto) ---------- */
+  /* --- neutros base: absoluto #000 -------------------------------------- */
   --color-base-00: #000000;
   --color-base-05: #000000;
   --color-base-10: #000000;
@@ -64,8 +64,9 @@ settings:
   --background-modifier-border: #2b2b2b;
   --background-modifier-border-hover: #444444;
   --background-modifier-border-focus: var(--vostok-accent, #ff3e3e);
-  --background-modifier-hover: #141414;
-  --background-modifier-active-hover: #571111;
+  /* hover/seleção = TINTA DE ACENTO (nunca cinza neutro) */
+  --background-modifier-hover: color-mix(in oklch, #ff3e3e 16%, transparent);
+  --background-modifier-active-hover: color-mix(in oklch, #ff3e3e 24%, transparent);
   --background-modifier-form-field: #0a0a0a;
   --background-modifier-form-field-highlighted: #141414;
   --background-modifier-box-shadow: rgba(0, 0, 0, 0.7);
@@ -74,9 +75,9 @@ settings:
   --background-modifier-error-hover: #ff2a00;
   --background-modifier-error-rgb: 247, 0, 0;
   --background-modifier-cover: rgba(0, 0, 0, 0.85);
-  --background-modifier-message: #000000;   /* toast/tooltip base */
+  --background-modifier-message: #000000;
 
-  /* --- texto (editor — aprovado, não mexer no tom base) ----------------- */
+  /* --- texto (editor — aprovado) ---------------------------------------- */
   --text-normal: #ebebeb;
   --text-muted: #a4b0c6;
   --text-faint: #666666;
@@ -100,9 +101,10 @@ settings:
   --color-accent-2: #ff6b6b;
   --interactive-accent: var(--vostok-accent, #ff3e3e);
   --interactive-accent-hover: #ff2a00;
-  --interactive-normal: #111111;
-  --interactive-hover: #1a1a1a;
+  --interactive-normal: #0a0a0a;
+  --interactive-hover: #141414;
   --interactive-accent-rgb: 255, 62, 62;
+  --slider-track-background: #1a1a1a;
 
   /* --- cores estendidas -------------------------------------------------- */
   --color-red: #ff3e3e;
@@ -127,7 +129,7 @@ settings:
   --bold-color: #ffa34c;
   --italic-color: #f352ff;
 
-  /* --- links: morango neon (sem azul) ----------------------------------- */
+  /* --- links: morango neon ---------------------------------------------- */
   --link-color: #f352ff;
   --link-color-hover: #ff7bff;
   --link-external-color: #f352ff;
@@ -166,12 +168,12 @@ settings:
   --tag-background-hover: rgba(243, 82, 255, 0.2);
   --tag-border-color: rgba(243, 82, 255, 0.3);
 
-  /* --- navegação / explorer: BRANCO máx contraste ----------------------- */
+  /* --- navegação / explorer --------------------------------------------- */
   --nav-item-color: #ffffff;
   --nav-item-color-hover: #ffffff;
   --nav-item-color-active: #ffffff;
   --nav-item-color-selected: #ffffff;
-  --nav-item-background-hover: #141414;
+  --nav-item-background-hover: color-mix(in oklch, #ff3e3e 14%, transparent);
   --nav-item-background-active: #571111;
   --nav-item-background-selected: #571111;
   --nav-heading-color: #ffffff;
@@ -192,6 +194,7 @@ settings:
   --checkbox-border-color: #444444;
   --checkbox-border-color-hover: #666666;
   --checkbox-marker-color: #000000;
+  --toggle-thumb-color: #ffffff;
 
   /* --- grafo ------------------------------------------------------------- */
   --graph-node: #5cb6ff;
@@ -219,18 +222,15 @@ settings:
 
 /* ------------------------------------------------- CHROME do app (janela) */
 .theme-dark {
-  /* ribbon */
   --ribbon-background: #000000;
   --ribbon-background-collapsed: #000000;
 
-  /* titlebar / window frame */
   --titlebar-background: #000000;
   --titlebar-background-focused: #000000;
   --titlebar-text-color: #ffffff;
   --titlebar-text-color-focused: #ffffff;
   --titlebar-border-color: #2b2b2b;
 
-  /* abas */
   --tab-container-background: #000000;
   --tab-background-active: #000000;
   --tab-outline-color: #2b2b2b;
@@ -238,27 +238,26 @@ settings:
   --tab-text-color: #ffffff;
   --tab-text-color-active: #ffffff;
   --tab-text-color-focused: #ffffff;
-  --tab-text-color-focused-active: #ffffff;              /* ativa = branco */
-  --tab-text-color-focused-active-current: #ff3e3e;      /* current = escarlete */
+  --tab-text-color-focused-active: #ffffff;
+  --tab-text-color-focused-active-current: #ff3e3e;
 
-  /* status bar */
   --status-bar-background: #000000;
   --status-bar-text-color: #ffffff;
   --status-bar-border-color: #2b2b2b;
 
-  /* modal / settings / menu / tooltip / prompt → OLED absoluto */
   --modal-background: #000000;
   --settings-background: #000000;
   --modal-border-color: #2b2b2b;
   --menu-background: #000000;
-  --menu-item-background-hover: #571111;
+  --menu-item-background-hover: color-mix(in oklch, #ff3e3e 16%, transparent);
   --tooltip-background-color: #000000;
   --tooltip-text-color: #ffffff;
   --tooltip-border-color: #2b2b2b;
   --prompt-input-bg: #0a0a0a;
   --prompt-border-color: #2b2b2b;
 
-  /* scrollbar discreta (ciano só no ativo) */
+  --file-header-background: #000000;
+
   --scrollbar-bg: transparent;
   --scrollbar-thumb-bg: #262626;
   --scrollbar-active-thumb-bg: #00d5ff;
@@ -269,6 +268,29 @@ body {
   --font-monospace-theme: "JetBrainsMono Nerd Font", "JetBrains Mono",
     "Fira Code", "Cascadia Code", ui-monospace, "DejaVu Sans Mono", monospace;
 }
+
+/* ---------------------------------- toggles/botões: fundo quase-preto (não cinza) */
+.checkbox-container {
+  background-color: #1a1a1a;
+}
+.checkbox-container.is-enabled {
+  background-color: var(--interactive-accent);
+}
+.dropdown,
+button:not(.clickable-icon) {
+  background-color: var(--interactive-normal);
+}
+
+/* -------------------------------------------- ícones: branco cravado (chrome) */
+.side-dock-ribbon-action,
+.clickable-icon,
+.workspace-tab-header-inner-icon,
+.vertical-tab-nav-item-icon,
+.view-header .clickable-icon,
+.status-bar-item .clickable-icon {
+  color: var(--icon-color, #ffffff);
+}
+.svg-icon { color: inherit; }
 
 /* ------------------------------------------------------- títulos sempre bold */
 .cm-s-obsidian .cm-header,
