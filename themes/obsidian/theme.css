@@ -1,0 +1,220 @@
+/* ============================================================================
+   VOSTOK — tema Obsidian (dark, OLED) · tema-irmão do Vostok do opencode/nvim
+   Paleta derivada de ~/.config/opencode/themes/vostok.json
+   ============================================================================ */
+
+/* @settings
+
+name: Vostok
+id: vostok-theme
+settings:
+  -
+    id: vostok-glow
+    title: Glow neon nos títulos
+    description: Brilho escarlate no H1 (e leve nos demais títulos)
+    type: class-toggle
+    default: true
+  -
+    id: vostok-radius
+    title: Raio das bordas
+    description: 0 = brutalista (arestas retas). Aumente para suavizar.
+    type: variable-number-slider
+    default: 0
+    min: 0
+    max: 14
+    step: 1
+    format: px
+  -
+    id: vostok-accent
+    title: Cor de acento
+    description: Cor de destaque (links ativos, botões, seleção de menu)
+    type: variable-color
+    format: hex
+    default: '#ff3e3e'
+*/
+
+/* ---------------------------------------------------------------- dark only */
+.theme-dark {
+  /* --- neutros base (00 claro -> 100 escuro na convenção do Obsidian) ----- */
+  --color-base-00: #000000;
+  --color-base-05: #050505;
+  --color-base-10: #0a0a0a;
+  --color-base-20: #111111;
+  --color-base-25: #171717;
+  --color-base-30: #1f1f1f;
+  --color-base-35: #2b2b2b;
+  --color-base-40: #444444;
+  --color-base-50: #666666;
+  --color-base-60: #888888;
+  --color-base-70: #a4b0c6;
+  --color-base-100: #ebebeb;
+
+  /* --- superfícies ------------------------------------------------------- */
+  --background-primary: #000000;
+  --background-primary-alt: #0a0a0a;
+  --background-secondary: #0a0a0a;
+  --background-secondary-alt: #111111;
+  --background-modifier-border: #2b2b2b;
+  --background-modifier-border-hover: #444444;
+  --background-modifier-border-focus: var(--vostok-accent, #ff3e3e);
+  --background-modifier-hover: #141414;
+  --background-modifier-active-hover: #571111;
+  --background-modifier-form-field: #0a0a0a;
+  --background-modifier-form-field-highlighted: #141414;
+  --background-modifier-box-shadow: rgba(0, 0, 0, 0.7);
+  --background-modifier-success: #21ff85;
+  --background-modifier-error: #f70000;
+  --background-modifier-error-hover: #ff2a00;
+  --background-modifier-error-rgb: 247, 0, 0;
+  --background-modifier-cover: rgba(0, 0, 0, 0.85);
+
+  /* --- texto ------------------------------------------------------------- */
+  --text-normal: #ebebeb;
+  --text-muted: #666666;
+  --text-faint: #444444;
+  --text-accent: var(--vostok-accent, #ff3e3e);
+  --text-accent-hover: #ff6b6b;
+  --text-on-accent: #000000;
+  --text-error: #f70000;
+  --text-success: #21ff85;
+  --text-warning: #ffd300;
+  --text-selection: rgba(87, 17, 17, 0.99);
+  --text-highlight-bg: rgba(255, 184, 26, 0.25);
+  --text-highlight-bg-active: rgba(255, 184, 26, 0.45);
+  --caret-color: #ff3e3e;
+
+  /* --- acento / interativo ---------------------------------------------- */
+  --color-accent: var(--vostok-accent, #ff3e3e);
+  --color-accent-1: #ff2a00;
+  --color-accent-2: #ff6b6b;
+  --interactive-accent: var(--vostok-accent, #ff3e3e);
+  --interactive-accent-hover: #ff2a00;
+  --interactive-normal: #111111;
+  --interactive-hover: #1a1a1a;
+  --interactive-accent-rgb: 255, 62, 62;
+
+  /* --- cores estendidas (status, syntax, graph, canvas) ------------------ */
+  --color-red: #ff3e3e;
+  --color-orange: #ffa34c;
+  --color-yellow: #ffd300;
+  --color-green: #7bff57;
+  --color-cyan: #00d5ff;
+  --color-blue: #5cb6ff;
+  --color-purple: #f352ff;
+  --color-pink: #f352ff;
+
+  /* --- títulos ----------------------------------------------------------- */
+  --h1-color: #ff3e3e;
+  --h2-color: #ffb81a;
+  --h3-color: #00d5ff;
+  --h4-color: #5cb6ff;
+  --h5-color: #f352ff;
+  --h6-color: #a4b0c6;
+  --inline-title-color: #ff3e3e;
+  --bold-color: #ffb81a;
+  --italic-color: #ffa34c;
+
+  /* --- links ------------------------------------------------------------- */
+  --link-color: #1a9fff;
+  --link-color-hover: #5cb6ff;
+  --link-external-color: #1a9fff;
+  --link-external-color-hover: #5cb6ff;
+  --link-unresolved-color: #666666;
+  --link-unresolved-opacity: 0.8;
+
+  /* --- código ------------------------------------------------------------ */
+  --code-background: #0a0a0a;
+  --code-normal: #ebebeb;
+  --code-comment: #666666;
+  --code-function: #5cb6ff;
+  --code-important: #ff2a00;
+  --code-keyword: #f352ff;
+  --code-property: #ff2a00;
+  --code-punctuation: #00d5ff;
+  --code-string: #7bff57;
+  --code-tag: #ffb81a;
+  --code-value: #ffa34c;
+
+  /* --- blockquote, hr, tabelas ------------------------------------------ */
+  --blockquote-border-color: #ff3e3e;
+  --blockquote-color: #a4b0c6;
+  --blockquote-background-color: #0a0a0a;
+  --hr-color: #2b2b2b;
+  --divider-color: #2b2b2b;
+  --table-border-color: #2b2b2b;
+  --table-header-color: #ffb81a;
+  --table-row-alt-background: #080808;
+  --table-row-background-hover: #141414;
+
+  /* --- tags -------------------------------------------------------------- */
+  --tag-color: #00d5ff;
+  --tag-color-hover: #00d5ff;
+  --tag-background: rgba(0, 213, 255, 0.1);
+  --tag-background-hover: rgba(0, 213, 255, 0.2);
+  --tag-border-color: rgba(0, 213, 255, 0.3);
+
+  /* --- checkbox / toggles ------------------------------------------------ */
+  --checkbox-color: var(--vostok-accent, #ff3e3e);
+  --checkbox-color-hover: #ff2a00;
+  --checkbox-border-color: #444444;
+  --checkbox-border-color-hover: #666666;
+  --checkbox-marker-color: #000000;
+
+  /* --- scrollbar --------------------------------------------------------- */
+  --scrollbar-bg: transparent;
+  --scrollbar-thumb-bg: #2b2b2b;
+  --scrollbar-active-thumb-bg: #00d5ff;
+
+  /* --- raios (brutalista por padrão; controlado no Style Settings) ------- */
+  --radius-s: var(--vostok-radius, 0px);
+  --radius-m: var(--vostok-radius, 0px);
+  --radius-l: var(--vostok-radius, 0px);
+  --radius-xl: var(--vostok-radius, 0px);
+  --input-radius: var(--vostok-radius, 0px);
+  --tab-radius-active: var(--vostok-radius, 0px);
+  --checkbox-radius: var(--vostok-radius, 0px);
+  --toggle-radius: var(--vostok-radius, 0px);
+  --toggle-thumb-radius: var(--vostok-radius, 0px);
+  --slider-thumb-radius: var(--vostok-radius, 0px);
+}
+
+/* -------------------------------------------------------------- tipografia */
+body {
+  --font-monospace-theme: "JetBrainsMono Nerd Font", "JetBrains Mono",
+    "Fira Code", "Cascadia Code", ui-monospace, "DejaVu Sans Mono", monospace;
+}
+
+/* ------------------------------------------------------------------- glow */
+/* class-toggle "vostok-glow" (default ON) injeta .vostok-glow no body */
+.vostok-glow .markdown-rendered h1,
+.vostok-glow .HyperMD-header-1,
+.vostok-glow .cm-header-1,
+.vostok-glow .inline-title {
+  text-shadow: 0 0 8px rgba(255, 62, 62, 0.55), 0 0 22px rgba(255, 42, 0, 0.28);
+}
+.vostok-glow .markdown-rendered h2,
+.vostok-glow .HyperMD-header-2,
+.vostok-glow .cm-header-2 {
+  text-shadow: 0 0 7px rgba(255, 184, 26, 0.35);
+}
+.vostok-glow .markdown-rendered h3,
+.vostok-glow .HyperMD-header-3,
+.vostok-glow .cm-header-3 {
+  text-shadow: 0 0 7px rgba(0, 213, 255, 0.35);
+}
+
+/* -------------------------------------------------------- arestas marcadas */
+/* bloco de código e blockquote com barra de acento, sem cantos arredondados */
+.markdown-rendered blockquote {
+  border-left: 2px solid var(--blockquote-border-color);
+}
+.markdown-rendered pre {
+  border: 1px solid var(--background-modifier-border);
+}
+
+/* cursor/seleção do editor já vêm das vars; reforço do realce de busca */
+.cm-search-hit,
+.search-result-file-matched-text {
+  background: var(--text-highlight-bg);
+  color: var(--text-normal);
+}
