@@ -7,6 +7,7 @@
      2. AZUL NÃO é cor semântica (só metadata/estrutura)
      3. Quente carrega significado (rampa fogo vermelho→laranja→dourado)
      4. Estrutura/delimitadores nunca apagados
+   Chrome: OLED absoluto (#000 em tudo), separação só por borda #2b2b2b.
    ============================================================================ */
 
 /* @settings
@@ -41,13 +42,13 @@ settings:
 
 /* ---------------------------------------------------------------- dark only */
 .theme-dark {
-  /* --- neutros base ------------------------------------------------------ */
+  /* --- neutros base: absoluto #000 (só bordas quebram o preto) ---------- */
   --color-base-00: #000000;
-  --color-base-05: #050505;
-  --color-base-10: #0a0a0a;
-  --color-base-20: #111111;
-  --color-base-25: #171717;
-  --color-base-30: #1f1f1f;
+  --color-base-05: #000000;
+  --color-base-10: #000000;
+  --color-base-20: #000000;
+  --color-base-25: #000000;
+  --color-base-30: #000000;
   --color-base-35: #2b2b2b;
   --color-base-40: #444444;
   --color-base-50: #666666;
@@ -55,11 +56,11 @@ settings:
   --color-base-70: #a4b0c6;
   --color-base-100: #ebebeb;
 
-  /* --- superfícies ------------------------------------------------------- */
+  /* --- superfícies: tudo OLED #000 --------------------------------------- */
   --background-primary: #000000;
-  --background-primary-alt: #0a0a0a;
-  --background-secondary: #0a0a0a;
-  --background-secondary-alt: #111111;
+  --background-primary-alt: #000000;
+  --background-secondary: #000000;
+  --background-secondary-alt: #000000;
   --background-modifier-border: #2b2b2b;
   --background-modifier-border-hover: #444444;
   --background-modifier-border-focus: var(--vostok-accent, #ff3e3e);
@@ -73,8 +74,9 @@ settings:
   --background-modifier-error-hover: #ff2a00;
   --background-modifier-error-rgb: 247, 0, 0;
   --background-modifier-cover: rgba(0, 0, 0, 0.85);
+  --background-modifier-message: #000000;   /* toast/tooltip base */
 
-  /* --- texto ------------------------------------------------------------- */
+  /* --- texto (editor — aprovado, não mexer no tom base) ----------------- */
   --text-normal: #ebebeb;
   --text-muted: #a4b0c6;
   --text-faint: #666666;
@@ -92,7 +94,7 @@ settings:
   /* --- acento / interativo ---------------------------------------------- */
   --accent-h: 0;
   --accent-s: 99%;
-  --accent-l: 62%;             /* = #ff3e3e — alinha o accent interno do app */
+  --accent-l: 62%;
   --color-accent: var(--vostok-accent, #ff3e3e);
   --color-accent-1: #ff2a00;
   --color-accent-2: #ff6b6b;
@@ -149,12 +151,12 @@ settings:
   /* --- blockquote, hr, tabelas ------------------------------------------ */
   --blockquote-border-color: #ff3e3e;
   --blockquote-color: #546178;
-  --blockquote-background-color: #0a0a0a;
+  --blockquote-background-color: #000000;
   --hr-color: #2b2b2b;
   --divider-color: #2b2b2b;
   --table-border-color: #2b2b2b;
   --table-header-color: #ff2a00;
-  --table-row-alt-background: #080808;
+  --table-row-alt-background: #050505;
   --table-row-background-hover: #141414;
 
   /* --- tags -------------------------------------------------------------- */
@@ -164,23 +166,23 @@ settings:
   --tag-background-hover: rgba(243, 82, 255, 0.2);
   --tag-border-color: rgba(243, 82, 255, 0.3);
 
-  /* --- navegação / explorer: estrutura legível -------------------------- */
-  --nav-item-color: #bababa;
-  --nav-item-color-hover: #ebebeb;
+  /* --- navegação / explorer: BRANCO máx contraste ----------------------- */
+  --nav-item-color: #ffffff;
+  --nav-item-color-hover: #ffffff;
   --nav-item-color-active: #ffffff;
   --nav-item-color-selected: #ffffff;
   --nav-item-background-hover: #141414;
   --nav-item-background-active: #571111;
   --nav-item-background-selected: #571111;
-  --nav-heading-color: #a4b0c6;
-  --nav-collapse-icon-color: #8a8a8a;
-  --nav-collapse-icon-color-collapsed: #8a8a8a;
+  --nav-heading-color: #ffffff;
+  --nav-collapse-icon-color: #ffffff;
+  --nav-collapse-icon-color-collapsed: #ffffff;
   --nav-indentation-guide-color: #2b2b2b;
-  --nav-file-tag-color: #666666;
+  --nav-file-tag-color: #8a8a8a;
 
-  /* --- ícones: NEUTROS (azul/ciano só em delimitador/tag) --------------- */
-  --icon-color: #8a8a8a;
-  --icon-color-hover: #ebebeb;
+  /* --- ícones: BRANCO ---------------------------------------------------- */
+  --icon-color: #ffffff;
+  --icon-color-hover: #ffffff;
   --icon-color-active: var(--vostok-accent, #ff3e3e);
   --icon-color-focused: #ffffff;
 
@@ -217,40 +219,41 @@ settings:
 
 /* ------------------------------------------------- CHROME do app (janela) */
 .theme-dark {
-  /* ribbon (barra de ícones esquerda) */
+  /* ribbon */
   --ribbon-background: #000000;
   --ribbon-background-collapsed: #000000;
 
   /* titlebar / window frame */
   --titlebar-background: #000000;
-  --titlebar-background-focused: #0a0a0a;
-  --titlebar-text-color: #a4b0c6;
-  --titlebar-text-color-focused: #ebebeb;
+  --titlebar-background-focused: #000000;
+  --titlebar-text-color: #ffffff;
+  --titlebar-text-color-focused: #ffffff;
   --titlebar-border-color: #2b2b2b;
 
   /* abas */
   --tab-container-background: #000000;
-  --tab-background-active: #0a0a0a;
+  --tab-background-active: #000000;
   --tab-outline-color: #2b2b2b;
   --tab-divider-color: #2b2b2b;
-  --tab-text-color: #a4b0c6;
-  --tab-text-color-active: #ebebeb;
-  --tab-text-color-focused: #a4b0c6;
+  --tab-text-color: #ffffff;
+  --tab-text-color-active: #ffffff;
+  --tab-text-color-focused: #ffffff;
   --tab-text-color-focused-active: #ffffff;              /* ativa = branco */
   --tab-text-color-focused-active-current: #ff3e3e;      /* current = escarlete */
 
   /* status bar */
   --status-bar-background: #000000;
-  --status-bar-text-color: #a4b0c6;
+  --status-bar-text-color: #ffffff;
   --status-bar-border-color: #2b2b2b;
 
-  /* modal / menu / tooltip / prompt */
-  --modal-background: #0a0a0a;
+  /* modal / settings / menu / tooltip / prompt → OLED absoluto */
+  --modal-background: #000000;
+  --settings-background: #000000;
   --modal-border-color: #2b2b2b;
-  --menu-background: #0a0a0a;
+  --menu-background: #000000;
   --menu-item-background-hover: #571111;
-  --tooltip-background-color: #0a0a0a;
-  --tooltip-text-color: #ebebeb;
+  --tooltip-background-color: #000000;
+  --tooltip-text-color: #ffffff;
   --tooltip-border-color: #2b2b2b;
   --prompt-input-bg: #0a0a0a;
   --prompt-border-color: #2b2b2b;
@@ -292,6 +295,11 @@ body {
 .vostok-glow .HyperMD-header-3,
 .vostok-glow .cm-header-3 {
   text-shadow: 0 0 7px rgba(255, 184, 26, 0.30);
+}
+
+/* -------------------------------------------- popups: borda (senão somem) */
+.menu, .tooltip, .suggestion-container, .prompt, .modal {
+  border: 1px solid var(--background-modifier-border);
 }
 
 /* ------------------------------------------------- comentário / quote / etc */
