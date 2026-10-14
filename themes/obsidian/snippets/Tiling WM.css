@@ -1,0 +1,84 @@
+/*------------------------------------------------------------------------------
+Tiling WM — Obsidian without chrome
+Zera o "furniture" de janela que um WM/tiling já provê: titlebar, botões
+fechar/min/max, chevrons das sidebars, faixa de abas e o cabeçalho da nota.
+Sem plugin. Nomes de classe lidos do CSS do próprio Obsidian (1.13.7).
+
+PAREIE COM UM SETTING: Aparência → Estilo da janela → **Escondido**.
+(deve estar assim; senão sobra a moldura desenhada pelo WM/App.)
+------------------------------------------------------------------------------*/
+/* @settings
+name: Tiling WM
+id: tiling-wm
+settings:
+-
+id: twm-tabs
+title: Mostrar a faixa de abas
+description: Traz a faixa de abas de volta. Escondida por padrão — o quick switcher (Ctrl+O) faz o mesmo.
+type: class-toggle
+default: false
+-
+id: twm-hide-ribbon
+title: Esconder o ribbon (barra de ícones)
+description: Remove a faixa vertical de ícones da esquerda. Tudo nela está na paleta de comandos.
+type: class-toggle
+default: false
+-
+id: twm-hide-status
+title: Esconder a barra de status
+description: Remove a barra de status do canto inferior.
+type: class-toggle
+default: false
+*/
+/* =========================================================================
+1. A TITLEBAR E SEUS BOTÕES DE JANELA
+========================================================================= */
+body:not(.is-mobile) .titlebar {
+  display: none !important;
+}
+body:not(.is-mobile) :is(.titlebar-button-container,
+  .titlebar-button,
+  .titlebar-inner,
+  .titlebar-text) {
+  display: none !important;
+}
+/* =========================================================================
+2. CHEVRONS DE COLAPSAR SIDEBAR (as setinhas) — a sidebar em si fica.
+========================================================================= */
+body:not(.is-mobile) :is(.sidebar-toggle-button,
+  .sidebar-toggle-button.mod-left,
+  .sidebar-toggle-button.mod-right) {
+  display: none !important;
+}
+/* =========================================================================
+3. A FAIXA DE ABAS
+========================================================================= */
+body:not(.is-mobile):not(.twm-tabs) .workspace-tab-header-container {
+  display: none !important;
+}
+/* O cabeçalho por-painel — breadcrumbs, voltar/avançar, menu do painel. */
+body:not(.is-mobile) :is(.view-header,
+  .view-header-nav-buttons) {
+  display: none !important;
+}
+/* =========================================================================
+4. OPCIONAIS — desligados a menos que você ligue
+========================================================================= */
+body.twm-hide-ribbon:not(.is-mobile) .workspace-ribbon {
+  display: none !important;
+}
+body.twm-hide-status:not(.is-mobile) .status-bar {
+  display: none !important;
+}
+/* =========================================================================
+5. RECUPERAR O ESPAÇO
+Em frameless, o Obsidian reserva espaço pra titlebar via padding no
+app-container. Zera isso, senão as notas ficam sob uma faixa em branco.
+========================================================================= */
+body:not(.is-mobile).is-frameless .app-container,
+body:not(.is-mobile).is-hidden-frameless .app-container {
+  padding-top: 0 !important;
+}
+body:not(.is-mobile) .workspace {
+  top: 0 !important;
+}

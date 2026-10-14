@@ -1,0 +1,7 @@
+/* Vostok — ajustes de UI pessoais */
+
+/* Esconde a barra de status (a "barrinha" do canto inferior).
+   (A barra de topo/moldura é tratada pelo snippet "Tiling WM".) */
+.status-bar {
+  display: none;
+}

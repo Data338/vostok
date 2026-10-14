@@ -1,0 +1,10 @@
+{
+  "theme": "obsidian",
+  "cssTheme": "Vostok",
+  "accentColor": "",
+  "enabledCssSnippets": [
+    "vostok-ui",
+    "Tiling WM"
+  ],
+  "showRibbon": false
+}
