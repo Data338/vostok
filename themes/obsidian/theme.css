@@ -1,9 +1,8 @@
 /* ============================================================================
    VOSTOK — tema Obsidian (dark, OLED)
-   Irmão do Vostok de opencode/nvim. Canônico: nvim/colors/vostok.lua +
-   README (Scoria OLED + alma One Dark turbo-neon).
+   Irmão do Vostok de opencode/nvim. Canônico: nvim/colors/vostok.lua + README.
 
-   As 4 regras do Vostok:
+   Regras do Vostok:
      1. Poucos matizes, um por categoria (≤6)
      2. AZUL NÃO é cor semântica (só metadata/estrutura)
      3. Quente carrega significado (rampa fogo vermelho→laranja→dourado)
@@ -77,7 +76,7 @@ settings:
 
   /* --- texto ------------------------------------------------------------- */
   --text-normal: #ebebeb;
-  --text-muted: #a4b0c6;   /* metadata legível (regra 4: estrutura visível) */
+  --text-muted: #a4b0c6;
   --text-faint: #666666;
   --text-accent: var(--vostok-accent, #ff3e3e);
   --text-accent-hover: #ff6b6b;
@@ -88,9 +87,12 @@ settings:
   --text-selection: rgba(87, 17, 17, 0.99);   /* #571111 */
   --text-highlight-bg: #3a2d00;
   --text-highlight-bg-active: #ffd300;
-  --caret-color: #ffd300;   /* cursor Vostok (amarelo) */
+  --caret-color: #ffd300;
 
   /* --- acento / interativo ---------------------------------------------- */
+  --accent-h: 0;
+  --accent-s: 99%;
+  --accent-l: 62%;             /* = #ff3e3e — alinha o accent interno do app */
   --color-accent: var(--vostok-accent, #ff3e3e);
   --color-accent-1: #ff2a00;
   --color-accent-2: #ff6b6b;
@@ -110,20 +112,20 @@ settings:
   --color-purple: #f352ff;
   --color-pink: #f352ff;
 
-  /* --- títulos: RAMPA DE FOGO (nvim markup.heading) --------------------- */
-  --h1-color: #ff2a00;   /* escarlete (var) */
-  --h2-color: #ffa34c;   /* laranja (num)   */
-  --h3-color: #ffb81a;   /* dourado (type)  */
-  --h4-color: #7bff57;   /* verde (string)  */
-  --h5-color: #5cb6ff;   /* azul (function) */
-  --h6-color: #f352ff;   /* magenta (kw)    */
+  /* --- títulos: RAMPA DE FOGO ------------------------------------------- */
+  --h1-color: #ff2a00;
+  --h2-color: #ffa34c;
+  --h3-color: #ffb81a;
+  --h4-color: #7bff57;
+  --h5-color: #5cb6ff;
+  --h6-color: #f352ff;
   --inline-title-color: #ff2a00;
 
   /* --- ênfase ------------------------------------------------------------ */
-  --bold-color: #ffa34c;     /* numO */
-  --italic-color: #f352ff;   /* kwM  */
+  --bold-color: #ffa34c;
+  --italic-color: #f352ff;
 
-  /* --- links: morango neon, NÃO azul (regra 2) -------------------------- */
+  /* --- links: morango neon (sem azul) ----------------------------------- */
   --link-color: #f352ff;
   --link-color-hover: #ff7bff;
   --link-external-color: #f352ff;
@@ -139,14 +141,14 @@ settings:
   --code-important: #ff2a00;
   --code-keyword: #f352ff;
   --code-property: #ff2a00;
-  --code-punctuation: #00d5ff;   /* delimitadores Tron (assinatura) */
+  --code-punctuation: #00d5ff;
   --code-string: #7bff57;
   --code-tag: #ffb81a;
   --code-value: #ffa34c;
 
   /* --- blockquote, hr, tabelas ------------------------------------------ */
   --blockquote-border-color: #ff3e3e;
-  --blockquote-color: #546178;   /* comentário escuro, itálico */
+  --blockquote-color: #546178;
   --blockquote-background-color: #0a0a0a;
   --hr-color: #2b2b2b;
   --divider-color: #2b2b2b;
@@ -162,7 +164,7 @@ settings:
   --tag-background-hover: rgba(243, 82, 255, 0.2);
   --tag-border-color: rgba(243, 82, 255, 0.3);
 
-  /* --- navegação / explorer: estrutura legível (regra 4) ---------------- */
+  /* --- navegação / explorer: estrutura legível -------------------------- */
   --nav-item-color: #bababa;
   --nav-item-color-hover: #ebebeb;
   --nav-item-color-active: #ffffff;
@@ -171,20 +173,16 @@ settings:
   --nav-item-background-active: #571111;
   --nav-item-background-selected: #571111;
   --nav-heading-color: #a4b0c6;
-  --nav-collapse-icon-color: #a4b0c6;
-  --nav-collapse-icon-color-collapsed: #a4b0c6;
+  --nav-collapse-icon-color: #8a8a8a;
+  --nav-collapse-icon-color-collapsed: #8a8a8a;
   --nav-indentation-guide-color: #2b2b2b;
   --nav-file-tag-color: #666666;
 
-  /* --- ícones / chrome --------------------------------------------------- */
-  --icon-color: #a4b0c6;
+  /* --- ícones: NEUTROS (azul/ciano só em delimitador/tag) --------------- */
+  --icon-color: #8a8a8a;
   --icon-color-hover: #ebebeb;
   --icon-color-active: var(--vostok-accent, #ff3e3e);
   --icon-color-focused: #ffffff;
-  --tab-text-color: #a4b0c6;
-  --tab-text-color-active: #ffffff;
-  --tab-text-color-focused: #ffffff;
-  --tab-text-color-focused-active: #ffffff;
 
   /* --- checkbox / toggles ------------------------------------------------ */
   --checkbox-color: var(--vostok-accent, #ff3e3e);
@@ -193,12 +191,7 @@ settings:
   --checkbox-border-color-hover: #666666;
   --checkbox-marker-color: #000000;
 
-  /* --- scrollbar --------------------------------------------------------- */
-  --scrollbar-bg: transparent;
-  --scrollbar-thumb-bg: #2b2b2b;
-  --scrollbar-active-thumb-bg: #00d5ff;
-
-  /* --- grafo (derivado da filosofia: frio=metadata, quente=foco) -------- */
+  /* --- grafo ------------------------------------------------------------- */
   --graph-node: #5cb6ff;
   --graph-node-focused: #ff2a00;
   --graph-node-tag: #f352ff;
@@ -207,17 +200,65 @@ settings:
   --graph-line: #2b2b2b;
   --graph-text: #a4b0c6;
 
-  /* --- raios (brutalista; controlado no Style Settings) ----------------- */
+  /* --- raios (brutalista) ------------------------------------------------ */
   --radius-s: var(--vostok-radius, 0px);
   --radius-m: var(--vostok-radius, 0px);
   --radius-l: var(--vostok-radius, 0px);
   --radius-xl: var(--vostok-radius, 0px);
   --input-radius: var(--vostok-radius, 0px);
+  --tab-radius: var(--vostok-radius, 0px);
   --tab-radius-active: var(--vostok-radius, 0px);
+  --tab-curve: 0px;
   --checkbox-radius: var(--vostok-radius, 0px);
   --toggle-radius: var(--vostok-radius, 0px);
   --toggle-thumb-radius: var(--vostok-radius, 0px);
   --slider-thumb-radius: var(--vostok-radius, 0px);
+}
+
+/* ------------------------------------------------- CHROME do app (janela) */
+.theme-dark {
+  /* ribbon (barra de ícones esquerda) */
+  --ribbon-background: #000000;
+  --ribbon-background-collapsed: #000000;
+
+  /* titlebar / window frame */
+  --titlebar-background: #000000;
+  --titlebar-background-focused: #0a0a0a;
+  --titlebar-text-color: #a4b0c6;
+  --titlebar-text-color-focused: #ebebeb;
+  --titlebar-border-color: #2b2b2b;
+
+  /* abas */
+  --tab-container-background: #000000;
+  --tab-background-active: #0a0a0a;
+  --tab-outline-color: #2b2b2b;
+  --tab-divider-color: #2b2b2b;
+  --tab-text-color: #a4b0c6;
+  --tab-text-color-active: #ebebeb;
+  --tab-text-color-focused: #a4b0c6;
+  --tab-text-color-focused-active: #ffffff;              /* ativa = branco */
+  --tab-text-color-focused-active-current: #ff3e3e;      /* current = escarlete */
+
+  /* status bar */
+  --status-bar-background: #000000;
+  --status-bar-text-color: #a4b0c6;
+  --status-bar-border-color: #2b2b2b;
+
+  /* modal / menu / tooltip / prompt */
+  --modal-background: #0a0a0a;
+  --modal-border-color: #2b2b2b;
+  --menu-background: #0a0a0a;
+  --menu-item-background-hover: #571111;
+  --tooltip-background-color: #0a0a0a;
+  --tooltip-text-color: #ebebeb;
+  --tooltip-border-color: #2b2b2b;
+  --prompt-input-bg: #0a0a0a;
+  --prompt-border-color: #2b2b2b;
+
+  /* scrollbar discreta (ciano só no ativo) */
+  --scrollbar-bg: transparent;
+  --scrollbar-thumb-bg: #262626;
+  --scrollbar-active-thumb-bg: #00d5ff;
 }
 
 /* -------------------------------------------------------------- tipografia */
@@ -253,11 +294,7 @@ body {
   text-shadow: 0 0 7px rgba(255, 184, 26, 0.30);
 }
 
-/* ------------------------------------------------- comentário/itálico/etc. */
-.cm-comment, .cm-s-obsidian .cm-comment,
-code, .cm-inline-code {
-  font-style: normal;
-}
+/* ------------------------------------------------- comentário / quote / etc */
 .cm-comment, .cm-s-obsidian .cm-comment {
   font-style: italic;
 }
@@ -273,7 +310,7 @@ code, .cm-inline-code {
 /* -------------------------------------------------------- estrutura visível */
 .cm-s-obsidian .cm-formatting,
 .cm-s-obsidian .cm-formatting-header {
-  color: #00d5ff;   /* delimitadores Tron nunca apagados */
+  color: #00d5ff;
 }
 
 /* realce de busca */
